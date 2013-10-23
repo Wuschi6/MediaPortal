@@ -182,9 +182,9 @@ class Flashx(UrllibHelper):
 		html = self.__getData(url, False)
 		vidUrl = None
 		if html:
-			js = re.search('class="auto-style6".*?<a href="(.*?)"', html, re.S)
+			js = re.search('class="auto-style6".*?<a href=(.*?)</span><br', html, re.S)
 			if js:
-				m = re.search('<form action="(.*?)".*?="id" value="(.*?)">.*?="sec" value="(.*?)">', html, re.S)
+				m = re.search('action="(.*?)".*?="id" value="(.*?)">.*?="sec" value="(.*?)">', html, re.S)
 				if m:
 					pdata = {}
 					pdata['id'] = m.group(2)
