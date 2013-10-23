@@ -132,7 +132,6 @@ class get_stream_link:
 			elif re.search('videoweed.es', data, re.S):
 				link = data
 				#print link
-				#getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.videoweed).addErrback(self.errorload)
 				getPage(link, cookies=cj, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.movshare, link, "videoweed").addErrback(self.errorload)
 
 			elif re.search('novamov.com', data, re.S):
@@ -145,7 +144,7 @@ class get_stream_link:
 				#print link
 				getPage(link, cookies=cj, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.movshare, link, "movshare").addErrback(self.errorload)
 
-			elif re.match('.*divxstage', data, re.S):
+			elif re.search('divxstage', data, re.S):
 				link = data
 				#print link
 				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.movshare, link, "divxstage").addErrback(self.errorload)
@@ -191,7 +190,6 @@ class get_stream_link:
 				if hash:
 					#print "Hash:",hash.group(1)
 					self.tw_agent_hlp.getWebPage(self.flashx_tv3b, self.stream_not_found, link, True)
-					#getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.flashx_tv3b).addErrback(self.errorload)
 				elif re.search('embed.php\?hash=', link) or re.search('embed_player.php\?hash=', link) or re.search('embed_player.php\?vid=', link) or re.search('embed.php\?vid=', link):
 					self.flashx_tv3(link)
 				elif re.search('player/fxtv.php.hash=', link):
@@ -903,9 +901,6 @@ class get_stream_link:
 			self.stream_not_found()
 
 	def movshare(self, data, url, hostername):
-		self.movshare_post(data, hostername)
-
-	def movshare_post(self, data, hostername):
 		print "movshare drin:", hostername
 		m = re.search('flashvars.filekey=(.*?);', data, re.S)
 		if not m:
