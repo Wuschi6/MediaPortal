@@ -69,10 +69,10 @@ class myvideotvGenreScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		raw = re.findall("class='vFullEpisode'.*?<a\shref='(/channel/.*?)'.*?title='(.*?)'><img.*?longdesc='(.*?)'.*?'pChText'>(.*?)</div>", data, re.S)
+		raw = re.findall("class='vFullEpisode'.*?<a\shref='(/channel/.*?)'.*?title='(.*?)'><img\sid='\D(.*?)'.*?longdesc='(.*?)'.*?'pChText'>(.*?)</div>", data, re.S)
 		if raw:
-			for (Url, Title, Image, Handlung) in raw:
-				self.filmliste.append((decodeHtml(Title), Url, Image, Handlung))
+			for (Url, Title, id, Image, Handlung) in raw:
+				self.filmliste.append((decodeHtml(Title), id, Image, Handlung))
 		self.filmliste.sort(key=lambda t : t[0].lower())
 		self.chooseMenuList.setList(map(myvideotvEntry, self.filmliste))
 		self.keyLocked = False
@@ -87,7 +87,7 @@ class myvideotvGenreScreen(Screen):
 
 	def keyOK(self):
 		Name = self['genreList'].getCurrent()[0][0]
-		Link = "http://www.myvideo.de" + self['genreList'].getCurrent()[0][1]
+		Link = self['genreList'].getCurrent()[0][1]
 		self.session.open(myvideotvListScreen, Link, Name, self.portal)
 
 	def keyLeft(self):
@@ -168,31 +168,26 @@ class myvideotvListScreen(Screen):
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
 		self['liste'] = self.chooseMenuList
-		self.page = 0
-		self.lastpage = 0
+		self.page = 1
+		self.lastpage = 1
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
 		self.keyLocked = True
 		self.filmliste = []
-		url = self.Link
+		url = "http://www.myvideo.de/iframe.php?lpage=%s&function=mv_charts&action=full_episodes&page=%s&tab=1" % (str(self.page), self.Link)
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		#lastpage = re.search('class="ClnNextNblEnd".*?mode=verpasst([\d]+)\&amp;red', data, re.S)
-		#if lastpage:
-		#	self.lastpage = int(lastpage.group(1))+1
-		#	self['page'].setText("%s / %s" % (str(self.page+1), str(self.lastpage)))
-		#else:
-		#	lastpage = re.search('ClnInfo.*?class="mediathek_menu_.*?([\d]+)&nbsp;.*?class="ClnNextLock', data, re.S)
-		#	if lastpage:
-		#		self.lastpage = int(lastpage.group(1))
-		#		self['page'].setText("%s / %s" % (str(self.page+1), str(self.lastpage)))
-		#	else:
-		#		self.lastpage = 0
-		#		self['page'].setText("%s / 1" % str(self.page+1))
-		parse = re.search('id_full_episodes_content(.*?)CDATA', data, re.S)
-		raw = re.findall("class='slThumb.*?href='.*?'\stitle='(.*?)'><img.*?id='(.*?)'.*?longdesc='(.*?)'.*?class='pChText'>(.*?)</div>", parse.group(1), re.S)
+		lastpage = re.search("pnPages'>\s\(\d+/(.*?)\)", data, re.S)
+		if lastpage:
+			self.lastpage = int(lastpage.group(1))
+			self['page'].setText("%s / %s" % (str(self.page), str(self.lastpage)))
+		else:
+			self.lastpage = 1
+			self['page'].setText("%s / 1" % str(self.page))
+
+		raw = re.findall("class='slThumb.*?href='.*?'\stitle='(.*?)'><img.*?id='(.*?)'.*?longdesc='(.*?)'.*?class='pChText'>(.*?)</div>", data, re.S)
 		if raw:
 			for (Title, id, Image, Handlung) in raw:
 				self.filmliste.append((decodeHtml(Title), id, Image, Handlung))
@@ -214,7 +209,7 @@ class myvideotvListScreen(Screen):
 		print "PageDown"
 		if self.keyLocked:
 			return
-		if not self.page < 1:
+		if not self.page < 2:
 			self.page -= 1
 			self.loadPage()
 
