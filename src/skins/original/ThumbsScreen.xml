@@ -1,0 +1,18 @@
+<!-- bottonsScreen -->
+<screen name="MediaPortal_Thumbs" position="center,center" size="1280,720" backgroundColor="#00060606" flags="wfNoBorder">
+	<ePixmap position="0,0" size="1280,720" backgroundColor="#00242424" />
+    <ePixmap pixmap="~/original/images/buttonred.png" position="30,677" size="80,2" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/buttongreen.png" position="110,677" size="80,2" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/buttonyellow.png" position="190,677" size="80,2" alphatest="blend" />
+    <ePixmap pixmap="~/original/images/buttonblue.png" position="270,677" size="80,2" alphatest="blend" />
+    <widget name="F1" position="30,680" size="80,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" halign="center" />
+    <widget name="F2" position="110,680" size="80,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" halign="center" />
+    <widget name="F3" position="190,680" size="80,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" halign="center" />
+    <widget name="F4" position="270,680" size="80,30" transparent="1" font="mediaportal; 20" backgroundColor="#00101214" valign="bottom" halign="center" />
+    <ePixmap pixmap="~/original/images/info.png" position="1145,677" size="70,30" alphatest="blend" />
+	<widget name="Page" position="480,680" size="80,36" backgroundColor="#26181d20" transparent="1" foregroundColor="#00ffffff" font="mediaportal;18" valign="center" zPosition="1"/>
+	<widget name="page" position="540,680" size="560,36" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="center" foregroundColor="#00ffffff" zPosition="1"/>
+	<widget name="Thumb" position="1020,680" size="50,36" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="center" foregroundColor="#00ffffff" zPosition="1"/>
+	<widget name="thumb" position="1070,680" size="70,36" backgroundColor="#26181d20" transparent="1" font="mediaportal;18" valign="center" foregroundColor="#00ffffff" zPosition="1"/>
+
+    
