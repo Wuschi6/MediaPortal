@@ -10,6 +10,7 @@ from flashx import Flashx
 from userporn import Userporn
 from twagenthelper import TwAgentHelper
 from packer import unpack
+from imports import *
 
 # cookies
 ck = {}
@@ -22,6 +23,10 @@ class get_stream_link:
 		self.session = session
 		self.showmsgbox = True
 		self.tw_agent_hlp = TwAgentHelper()
+		
+		if config.mediaportal.premiumize_use.value:
+			self.puser = config.mediaportal.premiumize_username.value
+			self.ppass = config.mediaportal.premiumize_password.value
 
 	def check_link(self, data, got_link, showmsgbox=True):
 		print "check_link"
@@ -31,13 +36,41 @@ class get_stream_link:
 			if re.search("http://.*?putlocker.com/(file|embed)/", data, re.S):
 				link = data.replace('file','embed')
 				#print "ok:", link
-				if link:
+				if config.mediaportal.premiumize_use.value:
+					proxyStr = "http://%s:%s@scorpion.premiumize.me:80" % (self.puser, self.ppass)
+					proxy = urllib2.ProxyHandler({'http': proxyStr})
+					auth = urllib2.HTTPBasicAuthHandler()
+					opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
+					urllib2.install_opener(opener)
+					data = urllib2.urlopen(link).read()
+					
+					stream_url = re.findall("'file':\s'(.*?)'", data, re.S)
+					if stream_url:
+						self._callback(stream_url[0])
+					else:
+						self.stream_not_found()
+					
+				else:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.streamPutlockerSockshare, link, "putlocker").addErrback(self.errorload)
 
 			elif re.search("http://.*?sockshare.com/(file|embed)/", data, re.S | re.I):
 				link = data.replace('file','embed')
 				#print link
-				if link:
+				if config.mediaportal.premiumize_use.value:
+					proxyStr = "http://%s:%s@scorpion.premiumize.me:80" % (self.puser, self.ppass)
+					proxy = urllib2.ProxyHandler({'http': proxyStr})
+					auth = urllib2.HTTPBasicAuthHandler()
+					opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
+					urllib2.install_opener(opener)
+					data = urllib2.urlopen(link).read()
+					
+					stream_url = re.findall("'file':\s'(.*?)'", data, re.S)
+					if stream_url:
+						self._callback(stream_url[0])
+					else:
+						self.stream_not_found()
+
+				else:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.streamPutlockerSockshare, link, "sockshare").addErrback(self.errorload)
 
 			elif re.search("http://streamcloud.eu/", data, re.S):
@@ -183,8 +216,21 @@ class get_stream_link:
 
 			elif re.search('http://.*?bitshare.com', data, re.S):
 				link = data
-				#print link
-				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.bitshare).addErrback(self.errorload)
+				if config.mediaportal.premiumize_use.value:
+					proxyStr = "http://%s:%s@scorpion.premiumize.me:80" % (self.puser, self.ppass)
+					proxy = urllib2.ProxyHandler({'http': proxyStr})
+					auth = urllib2.HTTPBasicAuthHandler()
+					opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
+					urllib2.install_opener(opener)
+					data = urllib2.urlopen(link).read()
+					
+					stream_url = re.findall("'file':\s'(.*?)'", data, re.S)
+					if stream_url:
+						self._callback(stream_url[0])
+					else:
+						self.stream_not_found()
+				else:
+					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.bitshare).addErrback(self.errorload)
 
 			elif re.search('userporn.com', data, re.S):
 				link = data

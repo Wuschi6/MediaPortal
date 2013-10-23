@@ -67,6 +67,11 @@ config.mediaportal.sp_use_number_seek = ConfigYesNo(default = True)
 config.mediaportal.sp_pl_number = ConfigInteger(default = 1, limits = (1,99))
 config.mediaportal.sp_mi_key = ConfigSelection(default = "info", choices = [("info", _("EPG/INFO")),("displayHelp", _("HELP")),("showMovies", _("PVR/VIDEO"))])
 
+# Multihoster premiumize.me
+config.mediaportal.premiumize_use = ConfigYesNo(default = False)
+config.mediaportal.premiumize_username = ConfigText(default="user!", fixed_size=False)
+config.mediaportal.premiumize_password = ConfigText(default="pass!", fixed_size=False)
+
 # Sport
 #from additions.sport.ran import *
 #config.mediaportal.showRan = ConfigYesNo(default = True)
@@ -413,6 +418,10 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.configlist.append(getConfigListEntry("Videoqualität (andere Anbieter):", config.mediaportal.videoquali_others))
 		self.configlist.append(getConfigListEntry("Watchlist/Playlist/Userchan path:", config.mediaportal.watchlistpath))
 		self.configlist.append(getConfigListEntry("Grauzone aktivieren:", config.mediaportal.showgrauzone))
+		self.configlist.append(getConfigListEntry("----- Multihoster -----", config.mediaportal.fake_entry))
+		self.configlist.append(getConfigListEntry("Premiumize.me:", config.mediaportal.premiumize_use))
+		self.configlist.append(getConfigListEntry("Premiumize.me Username:", config.mediaportal.premiumize_username))
+		self.configlist.append(getConfigListEntry("Premiumize.me Password:", config.mediaportal.premiumize_password))
 
 		### Sport
 		self.sport.append(getConfigListEntry("NHL", config.mediaportal.showNhl))
