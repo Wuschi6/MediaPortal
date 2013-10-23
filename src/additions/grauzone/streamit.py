@@ -232,7 +232,7 @@ class streamitFilmListeScreen(Screen):
 		self.sortOrder = 0;
 		self.sortParStr = ["", "?orderby=title&order=ASC", "?imdb_rating=desc"]
 		self.genreTitle = "Filme in Genre "
-		self.sortOrderStr = [" - Sortierung neuste", " - Sortierung A-Z", " - Sortierung IMDb"]
+		self.sortOrderStr = [" - Sortierung neueste", " - Sortierung A-Z", " - Sortierung IMDb"]
 		self.sortOrderStrGenre = ""
 		self['title'] = Label(IS_Version)
 		self['ContentTitle'] = Label("")
