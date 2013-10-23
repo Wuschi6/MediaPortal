@@ -73,8 +73,8 @@ class myvideotvGenreScreen(Screen):
 		if raw:
 			for (Url, Title, Image, Handlung) in raw:
 				self.filmliste.append((decodeHtml(Title), Url, Image, Handlung))
-				self.chooseMenuList.setList(map(myvideotvEntry, self.filmliste))
-				self.filmliste.sort(key=lambda t : t[0].lower())
+		self.filmliste.sort(key=lambda t : t[0].lower())
+		self.chooseMenuList.setList(map(myvideotvEntry, self.filmliste))
 		self.keyLocked = False
 		self.showInfos()
 
