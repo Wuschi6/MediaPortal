@@ -841,8 +841,8 @@ class get_stream_link:
 				'usr_login': ""})
 
 			print info
-			reactor.callLater(6, self.faststream_getPage, url, method='POST', postdata=info, headers={'Content-Type':'application/x-www-form-urlencoded'})
-			message = self.session.open(MessageBox, _("Stream startet in 6 sec."), MessageBox.TYPE_INFO, timeout=6)
+			reactor.callLater(10, self.faststream_getPage, url, method='POST', postdata=info, headers={'Content-Type':'application/x-www-form-urlencoded'})
+			message = self.session.open(MessageBox, _("Stream startet in 10 sec."), MessageBox.TYPE_INFO, timeout=10)
 		else:
 			self.stream_not_found()
 
@@ -902,66 +902,7 @@ class get_stream_link:
 		else:
 			self.stream_not_found()
 
-	def videoweed(self, data):
-		print "drin okdf"
-		r = re.search('flashvars.domain="(.+?)".*flashvars.file="(.+?)".*' + 'flashvars.filekey="(.+?)"', data, re.DOTALL)
-		if r:
-			domain, fileid, filekey = r.groups()
-			api_call = ('%s/api/player.api.php?user=undefined&codes=1&file=%s' + '&pass=undefined&key=%s') % (domain, fileid, filekey)
-			if api_call:
-				getPage(api_call, method='GET').addCallback(self.videoweed_data).addErrback(self.errorload)
-			else:
-				self.stream_not_found()
-		else:
-			self.stream_not_found()
-
-	def videoweed_data(self, data):
-		rapi = re.search('url=(.+?)&title=', data)
-		if rapi:
-			stream_url = rapi.group(1)
-			if stream_url:
-				print stream_url
-				self._callback(stream_url)
-			else:
-				self.stream_not_found()
-		else:
-			self.stream_not_found()
-
-	def novamov(self, data):
-		file = re.findall('flashvars.file="(.*?)"', data)
-		key = re.findall('flashvars.filekey="(.*?)"', data)
-		if file and key:
-			url = "http://www.novamov.com/api/player.api.php?file=%s&key=%s" % (file[0], key[0])
-			aage = "Mozilla/5.0 (Windows; U; Windows NT 6.1; de; rv:1.9.2.17) Gecko/20110420 Firefox/3.6.17"
-			getPage(url, agent=aage, method='GET').addCallback(self.novamov_data).addErrback(self.errorload)
-		else:
-			self.stream_not_found()
-
-	def novamov_data(self, data):
-		ar = re.search('url=(.+?)&title', data)
-		if ar:
-			stream_url = ar.group(1)
-			print urllib2.unquote(stream_url)
-			self._callback(urllib2.unquote(stream_url))
-		else:
-			self.stream_not_found()
-
-	def divxstage(self, data):
-		print "divxstage drin"
-		file = re.findall('flashvars.file="(.*?)"', data)
-		key = re.findall('flashvars.filekey="(.*?)"', data)
-		if file and key:
-			url = "http://www.divxstage.eu/api/player.api.php?file=%s&key=%s" % (file[0], key[0])
-			print url
-			aage = "Mozilla/5.0 (Windows; U; Windows NT 6.1; de; rv:1.9.2.17) Gecko/20110420 Firefox/3.6.17"
-			getPage(url, agent=aage, method='GET').addCallback(self.movshare_xml).addErrback(self.errorload)
-		else:
-			print "ja"
-			self.stream_not_found()
-
 	def movshare(self, data, url, hostername):
-		#info = {}
-		#getPage(url, method='POST', cookies=cj, postdata=info, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.movshare_post, hostername).addErrback(self.errorload)
 		self.movshare_post(data, hostername)
 
 	def movshare_post(self, data, hostername):
@@ -1291,23 +1232,6 @@ class get_stream_link:
 					self.stream_not_found()
 			else:
 				self.stream_not_found()
-		else:
-			self.stream_not_found()
-
-	def nowvideo(self, data):
-		file = re.findall('flashvars.file="(.*?)"', data)
-		key = re.findall('flashvars.filekey="(.*?)"', data)
-		if file and key:
-			url = "http://www.nowvideo.eu/api/player.api.php?file=%s&key=%s" % (file[0], key[0])
-			getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.nowvideo_xml).addErrback(self.errorload)
-		else:
-			self.stream_not_found()
-
-	def nowvideo_xml(self, data):
-		rapi = re.search('url=(.+?)&title=', data)
-		if rapi:
-			stream_url = rapi.group(1)
-			self._callback(stream_url)
 		else:
 			self.stream_not_found()
 
