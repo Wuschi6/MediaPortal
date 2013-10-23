@@ -217,7 +217,7 @@ class myvideotvListScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		if self.page+1 < self.lastpage:
+		if self.page < self.lastpage:
 			self.page += 1
 			self.loadPage()
 
