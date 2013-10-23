@@ -67,7 +67,7 @@ class teleGenreScreen(Screen):
 
 	def loadPageData(self, data):
 		print "get channels"
-		channels = re.findall('src="(http://www.teledunet.com/tv/icones/.*?.jpg)".*?<span id=id=channel_.*?>(.*?)</span>', data, re.S)
+		channels = re.findall('src="(http://www.teledunet.com/tv/icones/.*?)".*?<span id=channel_.*?>(.*?)</span>', data, re.S)
 		if channels:
 			for image,channelname in channels:
 				print channelname
