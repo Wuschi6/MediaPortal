@@ -132,12 +132,13 @@ class get_stream_link:
 			elif re.search('videoweed.es', data, re.S):
 				link = data
 				#print link
-				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.videoweed).addErrback(self.errorload)
+				#getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.videoweed).addErrback(self.errorload)
+				getPage(link, cookies=cj, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.movshare, link, "videoweed").addErrback(self.errorload)
 
 			elif re.search('novamov.com', data, re.S):
 				link = data
 				#print link
-				getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.novamov).addErrback(self.errorload)
+				getPage(link, cookies=cj, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.movshare, link, "novamov").addErrback(self.errorload)
 
 			elif re.search('.movshare.net', data, re.S):
 				link = data
@@ -1051,6 +1052,12 @@ class get_stream_link:
 			elif hostername == "divxstage":
 				print "divxstage"
 				url = "http://www.divxstage.eu/api/player.api.php?cid3=undefined&key=%s&user=undefined&numOfErrors=0&cid=undefined&file=%s&cid2=undefined" % ( keyvar, filecode)
+			elif hostername == "novamov":
+				print "novamov"
+				url = "http://www.novamov.com/api/player.api.php?cid3=undefined&key=%s&user=undefined&numOfErrors=0&cid=undefined&file=%s&cid2=undefined" % ( keyvar, filecode)
+			elif hostername == "videoweed":
+				print "videoweed"
+				url = "http://www.videoweed.es/api/player.api.php?cid3=undefined&key=%s&user=undefined&numOfErrors=0&cid=undefined&file=%s&cid2=undefined" % ( keyvar, filecode)
 			else:
 				self.stream_not_found()
 			print url
@@ -1106,7 +1113,7 @@ class get_stream_link:
 	def movshare_xml(self, data):
 		file_link = re.search('url=(.+?)&title=', data)
 		if file_link:
-			stream_url = file_link.group(1)
+			stream_url = urllib.unquote(file_link.group(1))
 			print stream_url
 			self._callback(stream_url)
 		else:
