@@ -175,7 +175,7 @@ class myvideotvListScreen(Screen):
 	def loadPage(self):
 		self.keyLocked = True
 		self.filmliste = []
-		url = "http://www.myvideo.de/iframe.php?lpage=%s&function=mv_charts&action=full_episodes&page=%s&tab=1" % (str(self.page), self.Link)
+		url = "http://www.myvideo.de/iframe.php?lpage=%s&function=mv_charts&action=full_episodes&page=%s" % (str(self.page), self.Link)
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
