@@ -228,6 +228,19 @@ from additions.mediatheken.wissensthek import *
 config.mediaportal.wissensthek = ConfigYesNo(default = True)
 from additions.mediatheken.n24 import *
 config.mediaportal.n24 = ConfigYesNo(default = True)
+from additions.mediatheken.myvideo_tv import *
+config.mediaportal.showmyvideoserien = ConfigYesNo(default = True)
+config.mediaportal.showbbcserien = ConfigYesNo(default = True)
+config.mediaportal.showyfe = ConfigYesNo(default = True)
+config.mediaportal.showsonyretro = ConfigYesNo(default = True)
+config.mediaportal.showanimetv = ConfigYesNo(default = True)
+config.mediaportal.showProSieben = ConfigYesNo(default = True)
+config.mediaportal.showProSiebenMAXX = ConfigYesNo(default = True)
+config.mediaportal.showSat1 = ConfigYesNo(default = True)
+config.mediaportal.showSat1Gold = ConfigYesNo(default = True)
+config.mediaportal.showkabeleins = ConfigYesNo(default = True)
+config.mediaportal.showsixx = ConfigYesNo(default = True)
+config.mediaportal.showyep = ConfigYesNo(default = True)
 
 # Porn
 from additions.porn.x4tube import *
@@ -493,11 +506,22 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		#self.mediatheken.append(getConfigListEntry("arte Mediathek", config.mediaportal.showArte))
 		self.mediatheken.append(getConfigListEntry("KIKA+", config.mediaportal.showkika))
 		self.mediatheken.append(getConfigListEntry("KinderKino", config.mediaportal.showKinderKino))
-		self.mediatheken.append(getConfigListEntry("Myvideo", config.mediaportal.showMyvideo))
+		self.mediatheken.append(getConfigListEntry("MyVideo", config.mediaportal.showMyvideo))
 		self.mediatheken.append(getConfigListEntry("NetzKino", config.mediaportal.showNetzKino))
 		self.mediatheken.append(getConfigListEntry("N-TVNOW", config.mediaportal.showNTVnow))
 		self.mediatheken.append(getConfigListEntry("ORF TVthek", config.mediaportal.showORF))
 		self.mediatheken.append(getConfigListEntry("RTLNOW", config.mediaportal.showRTLnow))
+		self.mediatheken.append(getConfigListEntry("MyVideo Serien", config.mediaportal.showmyvideoserien))
+		self.mediatheken.append(getConfigListEntry("BBC Serien", config.mediaportal.showbbcserien))
+		self.mediatheken.append(getConfigListEntry("Your Family Entertainment", config.mediaportal.showyfe))
+		self.mediatheken.append(getConfigListEntry("Sony Retro", config.mediaportal.showsonyretro))
+		self.mediatheken.append(getConfigListEntry("Anime TV", config.mediaportal.showanimetv))
+		self.mediatheken.append(getConfigListEntry("ProSieben Mediathek", config.mediaportal.showProSieben))
+		self.mediatheken.append(getConfigListEntry("ProSieben MAXX Mediathek", config.mediaportal.showProSiebenMAXX))
+		self.mediatheken.append(getConfigListEntry("Sat.1 Mediathek", config.mediaportal.showSat1))
+		self.mediatheken.append(getConfigListEntry("Sat.1 Gold Mediathek", config.mediaportal.showSat1Gold))
+		self.mediatheken.append(getConfigListEntry("kabeleins Mediathek", config.mediaportal.showkabeleins))
+		self.mediatheken.append(getConfigListEntry("YEP! Mediathek", config.mediaportal.showyep))
 		self.mediatheken.append(getConfigListEntry("RTL2NOW", config.mediaportal.showRTL2now))
 		self.mediatheken.append(getConfigListEntry("RTLNITRONOW", config.mediaportal.showRTLnitro))
 		self.mediatheken.append(getConfigListEntry("SRF Player", config.mediaportal.showSRF))
@@ -907,6 +931,30 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.mediatheken.append(self.hauptListEntry("VOXNOW", "voxnow"))
 		if config.mediaportal.showRTLnow.value:
 			self.mediatheken.append(self.hauptListEntry("RTLNOW", "rtlnow"))
+		if config.mediaportal.showmyvideoserien.value:
+			self.mediatheken.append(self.hauptListEntry("MyVideo Serien", "myvideoserien"))
+		if config.mediaportal.showbbcserien.value:
+			self.mediatheken.append(self.hauptListEntry("BBC Serien", "bbcserien"))
+		if config.mediaportal.showyfe.value:
+			self.mediatheken.append(self.hauptListEntry("Your Family Entertainment", "yfe"))
+		if config.mediaportal.showsonyretro.value:
+			self.mediatheken.append(self.hauptListEntry("Sony Retro", "sonyretro"))
+		if config.mediaportal.showanimetv.value:
+			self.mediatheken.append(self.hauptListEntry("Anime TV", "animetv"))
+		if config.mediaportal.showProSieben.value:
+			self.mediatheken.append(self.hauptListEntry("ProSieben Mediathek", "prosieben"))
+		if config.mediaportal.showProSiebenMAXX.value:
+			self.mediatheken.append(self.hauptListEntry("ProSieben MAXX Mediathek", "prosiebenmaxx"))
+		if config.mediaportal.showSat1.value:
+			self.mediatheken.append(self.hauptListEntry("Sat.1 Mediathek", "sat1"))
+		if config.mediaportal.showSat1Gold.value:
+			self.mediatheken.append(self.hauptListEntry("Sat.1 Gold Mediathek", "sat1gold"))
+		if config.mediaportal.showkabeleins.value:
+			self.mediatheken.append(self.hauptListEntry("kabeleins Mediathek", "kabeleins"))
+		if config.mediaportal.showsixx.value:
+			self.mediatheken.append(self.hauptListEntry("sixx Mediathek", "sixx"))
+		if config.mediaportal.showyep.value:
+			self.mediatheken.append(self.hauptListEntry("YEP! Mediathek", "yep"))
 		if config.mediaportal.showNTVnow.value:
 			self.mediatheken.append(self.hauptListEntry("N-TVNOW", "ntvnow"))
 		if config.mediaportal.showRTL2now.value:
@@ -1491,6 +1539,30 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(VOXnowGenreScreen)
 		elif auswahl == "RTLNOW":
 			self.session.open(RTLnowGenreScreen)
+		elif auswahl == "MyVideo Serien":
+			self.session.open(myvideotvGenreScreen, "Weitere_Serien", "MyVideo Serien")
+		elif auswahl == "BBC Serien":
+			self.session.open(myvideotvGenreScreen, "BBC", "BBC Serien")
+		elif auswahl == "Your Family Entertainment":
+			self.session.open(myvideotvGenreScreen, "Your_Family_Entertainment", "Your Family Entertainment")
+		elif auswahl == "Sony Retro":
+			self.session.open(myvideotvGenreScreen, "Sony_Retro", "Sony Retro")
+		elif auswahl == "Anime TV":
+			self.session.open(myvideotvGenreScreen, "Anime_TV", "Anime TV")
+		elif auswahl == "ProSieben Mediathek":
+			self.session.open(myvideotvGenreScreen, "ProSieben", "ProSieben Mediathek")
+		elif auswahl == "ProSieben MAXX Mediathek":
+			self.session.open(myvideotvGenreScreen, "ProSieben_MAXX", "ProSieben MAXX Mediathek")
+		elif auswahl == "Sat.1 Mediathek":
+			self.session.open(myvideotvGenreScreen, "Sat_1", "Sat.1 Mediathek")
+		elif auswahl == "Sat.1 Gold Mediathek":
+			self.session.open(myvideotvGenreScreen, "Sat_1_Gold", "Sat.1 Gold Mediathek")
+		elif auswahl == "kabeleins Mediathek":
+			self.session.open(myvideotvGenreScreen, "kabel_eins", "kabeleins Mediathek")
+		elif auswahl == "sixx Mediathek":
+			self.session.open(myvideotvGenreScreen, "sixx", "sixx Mediathek")
+		elif auswahl == "YEP! Mediathek":
+			self.session.open(myvideotvGenreScreen, "YEP", "YEP! Mediathek")
 		elif auswahl == "N-TVNOW":
 			self.session.open(NTVnowGenreScreen)
 		elif auswahl == "RTL2NOW":
@@ -1875,6 +1947,30 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("VOXNOW", "voxnow", "Mediathek"))
 		if config.mediaportal.showRTLnow.value:
 			self.plugin_liste.append(("RTLNOW", "rtlnow", "Mediathek"))
+		if config.mediaportal.showmyvideoserien.value:
+			self.plugin_liste.append(("MyVideo Serien", "myvideoserien", "Mediathek"))
+		if config.mediaportal.showbbcserien.value:
+			self.plugin_liste.append(("BBC Serien", "bbcserien", "Mediathek"))
+		if config.mediaportal.showyfe.value:
+			self.plugin_liste.append(("Your Family Entertainment", "yfe", "Mediathek"))
+		if config.mediaportal.showsonyretro.value:
+			self.plugin_liste.append(("Sony Retro", "sonyretro", "Mediathek"))
+		if config.mediaportal.showanimetv.value:
+			self.plugin_liste.append(("Anime TV", "animetv", "Mediathek"))
+		if config.mediaportal.showProSieben.value:
+			self.plugin_liste.append(("ProSieben Mediathek", "prosieben", "Mediathek"))
+		if config.mediaportal.showProSiebenMAXX.value:
+			self.plugin_liste.append(("ProSieben MAXX Mediathek", "prosiebenmaxx", "Mediathek"))
+		if config.mediaportal.showSat1.value:
+			self.plugin_liste.append(("Sat.1 Mediathek", "sat1", "Mediathek"))
+		if config.mediaportal.showSat1Gold.value:
+			self.plugin_liste.append(("Sat.1 Gold Mediathek", "sat1gold", "Mediathek"))
+		if config.mediaportal.showkabeleins.value:
+			self.plugin_liste.append(("kabeleins Mediathek", "kabeleins", "Mediathek"))
+		if config.mediaportal.showsixx.value:
+			self.plugin_liste.append(("sixx Mediathek", "sixx", "Mediathek"))
+		if config.mediaportal.showyep.value:
+			self.plugin_liste.append(("YEP! Mediathek", "yep", "Mediathek"))
 		if config.mediaportal.showNTVnow.value:
 			self.plugin_liste.append(("N-TVNOW", "ntvnow", "Mediathek"))
 		if config.mediaportal.showRTL2now.value:
@@ -2530,6 +2626,30 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(VOXnowGenreScreen)
 		elif auswahl == "RTLNOW":
 			self.session.open(RTLnowGenreScreen)
+		elif auswahl == "MyVideo Serien":
+			self.session.open(myvideotvGenreScreen, "Weitere_Serien", "MyVideo Serien")
+		elif auswahl == "BBC Serien":
+			self.session.open(myvideotvGenreScreen, "BBC", "BBC Serien")
+		elif auswahl == "Your Family Entertainment":
+			self.session.open(myvideotvGenreScreen, "Your_Family_Entertainment", "Your Family Entertainment")
+		elif auswahl == "Sony Retro":
+			self.session.open(myvideotvGenreScreen, "Sony_Retro", "Sony Retro")
+		elif auswahl == "Anime TV":
+			self.session.open(myvideotvGenreScreen, "Anime_TV", "Anime TV")
+		elif auswahl == "ProSieben Mediathek":
+			self.session.open(myvideotvGenreScreen, "ProSieben", "ProSieben Mediathek")
+		elif auswahl == "ProSieben MAXX Mediathek":
+			self.session.open(myvideotvGenreScreen, "ProSieben_MAXX", "ProSieben MAXX Mediathek")
+		elif auswahl == "Sat.1 Mediathek":
+			self.session.open(myvideotvGenreScreen, "Sat_1", "Sat.1 Mediathek")
+		elif auswahl == "Sat.1 Gold Mediathek":
+			self.session.open(myvideotvGenreScreen, "Sat_1_Gold", "Sat.1 Gold Mediathek")
+		elif auswahl == "kabeleins Mediathek":
+			self.session.open(myvideotvGenreScreen, "kabel_eins", "kabeleins Mediathek")
+		elif auswahl == "sixx Mediathek":
+			self.session.open(myvideotvGenreScreen, "sixx", "sixx Mediathek")
+		elif auswahl == "YEP! Mediathek":
+			self.session.open(myvideotvGenreScreen, "YEP", "YEP! Mediathek")
 		elif auswahl == "N-TVNOW":
 			self.session.open(NTVnowGenreScreen)
 		elif auswahl == "RTL2NOW":
