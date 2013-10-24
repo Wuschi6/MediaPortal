@@ -311,10 +311,12 @@ from additions.porn.xxxsave import *
 config.mediaportal.showxxxsave = ConfigYesNo(default = False)
 from additions.porn.youporn import *
 config.mediaportal.showyouporn = ConfigYesNo(default = False)
-from additions.porn.amateurslust import *
-config.mediaportal.amateurslust = ConfigYesNo(default = False)
 from additions.porn.befuck import *
 config.mediaportal.befuck = ConfigYesNo(default = False)
+from additions.porn.amateurslust import *
+config.mediaportal.amateurslust = ConfigYesNo(default = False)
+from additions.porn.pornoid import *
+config.mediaportal.pornoid = ConfigYesNo(default = False)
 
 # Grauzone
 from additions.grauzone.evonic import *
@@ -565,8 +567,9 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.porn.append(getConfigListEntry("WetPlace", config.mediaportal.showwetplace))
 		self.porn.append(getConfigListEntry("xHamster", config.mediaportal.showXhamster))
 		self.porn.append(getConfigListEntry("YouPorn", config.mediaportal.showyouporn))
-		self.porn.append(getConfigListEntry("AmateursLust.com", config.mediaportal.amateurslust))
 		self.porn.append(getConfigListEntry("BeFuck.com", config.mediaportal.befuck))
+		self.porn.append(getConfigListEntry("AmateursLust.com", config.mediaportal.amateurslust))
+		self.porn.append(getConfigListEntry("PornoID.com", config.mediaportal.pornoid))
 		if config.mediaportal.showgrauzone.value:
 			#self.porn.append(getConfigListEntry("PlayPorn", config.mediaportal.showplayporn))
 			self.porn.append(getConfigListEntry("PORNMVZ", config.mediaportal.showpornmvz))
@@ -1067,10 +1070,12 @@ class haupt_Screen(Screen, ConfigListScreen):
 					self.porn.append(self.hauptListEntry("XXXSaVe", "xxxsave"))
 			if config.mediaportal.showyouporn.value:
 				self.porn.append(self.hauptListEntry("YouPorn", "youporn"))
-			if config.mediaportal.amateurslust.value:
-				self.porn.append(self.hauptListEntry("AmateursLust.com", "amateurslust"))
 			if config.mediaportal.befuck.value:
 				self.porn.append(self.hauptListEntry("BeFuck.com", "befuck"))
+			if config.mediaportal.amateurslust.value:
+				self.porn.append(self.hauptListEntry("AmateursLust.com", "amateurslust"))
+			if config.mediaportal.pornoid.value:
+				self.porn.append(self.hauptListEntry("PornoID.com", "pornoid"))
 
 		# Grauzone
 		if config.mediaportal.showgrauzone.value:
@@ -1689,10 +1694,12 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.pornscreen = xxxsaveFilmScreen
 		elif auswahl == "YouPorn":
 			self.pornscreen = youpornGenreScreen
-		elif auswahl == "AmateursLust.com":
-			self.pornscreen = amateurslustGenreScreen
 		elif auswahl == "BeFuck.com":
 			self.pornscreen = befuckGenreScreen
+		elif auswahl == "AmateursLust.com":
+			self.pornscreen = amateurslustGenreScreen
+		elif auswahl == "PornoID.com":
+			self.pornscreen = pornoidGenreScreen
 
 		if self.pornscreen:
 			if config.mediaportal.pornpin.value:
@@ -2093,10 +2100,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 					self.plugin_liste.append(("XXXSaVe", "xxxsave", "Porn"))
 			if config.mediaportal.showyouporn.value:
 				self.plugin_liste.append(("YouPorn", "youporn", "Porn"))
-			if config.mediaportal.amateurslust.value:
-				self.plugin_liste.append(("AmateursLust.com", "amateurslust", "Porn"))
 			if config.mediaportal.befuck.value:
 				self.plugin_liste.append(("BeFuck.com", "befuck", "Porn"))
+			if config.mediaportal.amateurslust.value:
+				self.plugin_liste.append(("AmateursLust.com", "amateurslust", "Porn"))
+			if config.mediaportal.pornoid.value:
+				self.plugin_liste.append(("PornoID.com", "pornoid", "Porn"))
 
 		# Grauzone
 		if (config.mediaportal.showgrauzone.value == False and config.mediaportal.filter.value == 'Grauzone'):
@@ -2780,10 +2789,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.pornscreen = xxxsaveFilmScreen
 		elif auswahl == "YouPorn":
 			self.pornscreen = youpornGenreScreen
-		elif auswahl == "AmateursLust.com":
-			self.pornscreen = amateurslustGenreScreen
 		elif auswahl == "BeFuck.com":
 			self.pornscreen = befuckGenreScreen
+		elif auswahl == "AmateursLust.com":
+			self.pornscreen = amateurslustGenreScreen
+		elif auswahl == "PornoID.com":
+			self.pornscreen = pornoidGenreScreen
 
 		if self.pornscreen:
 			if config.mediaportal.pornpin.value:
