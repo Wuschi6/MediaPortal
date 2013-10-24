@@ -88,6 +88,8 @@ class SimpleSeekHelper:
 							self.isMySpass = True
 						elif 'media.hdporn.net' in self.mySpassPath:
 							self.isMySpass = True
+						elif 'amateurslust.com' in self.mySpassPath:
+							self.isMySpass = True
 
 					self.percent = float(position[1]) * 100.0 / float(self.length[1])
 					if not self.isNumberSeek:
