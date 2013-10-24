@@ -14,8 +14,23 @@ def updatetubeFilmListEntry(entry):
 
 class updatetubeGenreScreen(Screen):
 
-	def __init__(self, session):
+	def __init__(self, session, mode):
 		self.session = session
+		self.mode = mode
+		
+		if self.mode == "updatetube":
+			self.portal = "UpdateTube.com"
+			self.baseurl = "www.updatetube.com"
+		if self.mode == "pinkrod":
+			self.portal = "Pinkrod.com"
+			self.baseurl = "www.pinkrod.com"
+		if self.mode == "hotshame":
+			self.portal = "hotshame.com"
+			self.baseurl = "www.hotshame.com"
+		if self.mode == "thenewporn":
+			self.portal = "TheNewPorn.com"
+			self.baseurl = "www.thenewporn.com"
+			
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/XXXGenreScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/XXXGenreScreen.xml"
@@ -35,7 +50,7 @@ class updatetubeGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("UpdateTube.com")
+		self['title'] = Label(self.portal)
 		self['name'] = Label("Genre Auswahl")
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
@@ -51,7 +66,7 @@ class updatetubeGenreScreen(Screen):
 
 	def layoutFinished(self):
 		self.keyLocked = True
-		url = "http://www.updatetube.com/categories/"
+		url = "http://%s/categories/" % self.baseurl
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
@@ -61,9 +76,9 @@ class updatetubeGenreScreen(Screen):
 			for (phUrl, phImage, phTitle) in phCats:
 				self.genreliste.append((phTitle.title(), phUrl, phImage))
 			self.genreliste.sort()
-			self.genreliste.insert(0, ("Most Popular", "http://www.updatetube.com/most-popular/", None))
-			self.genreliste.insert(0, ("Top Rated", "http://www.updatetube.com/top-rated/", None))
-			self.genreliste.insert(0, ("Newest", "http://www.updatetube.com/", None))
+			self.genreliste.insert(0, ("Most Popular", "http://%s/most-popular/" % self.baseurl, None))
+			self.genreliste.insert(0, ("Top Rated", "http://%s/top-rated/" % self.baseurl, None))
+			self.genreliste.insert(0, ("Newest", "http://%s/" % self.baseurl, None))
 			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(updatetubeGenreListEntry, self.genreliste))
 			self.chooseMenuList.moveToIndex(0)
@@ -87,7 +102,7 @@ class updatetubeGenreScreen(Screen):
 
 		else:
 			streamGenreLink = self['genreList'].getCurrent()[0][1]
-			self.session.open(updatetubeFilmScreen, streamGenreLink)
+			self.session.open(updatetubeFilmScreen, streamGenreLink, self.portal, self.baseurl)
 
 	def suchen(self):
 		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
@@ -95,8 +110,8 @@ class updatetubeGenreScreen(Screen):
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
 			self.suchString = callback.replace(' ', '+')
-			streamGenreLink = 'http://www.updatetube.com/search/?q=%s' % self.suchString
-			self.session.open(updatetubeFilmScreen, streamGenreLink)
+			streamGenreLink = 'http://%s/search/?q=%s' % (self.baseurl, self.suchString)
+			self.session.open(updatetubeFilmScreen, streamGenreLink, self.portal, self.baseurl)
 
 	def keyLeft(self):
 		if self.keyLocked:
@@ -127,9 +142,11 @@ class updatetubeGenreScreen(Screen):
 
 class updatetubeFilmScreen(Screen):
 
-	def __init__(self, session, phCatLink):
+	def __init__(self, session, phCatLink, portal, baseurl):
 		self.session = session
 		self.phCatLink = phCatLink
+		self.portal = portal
+		self.baseurl = baseurl
 		path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/%s/XXXFilmScreen.xml" % config.mediaportal.skin.value
 		if not fileExists(path):
 			path = "/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/XXXFilmScreen.xml"
@@ -152,7 +169,7 @@ class updatetubeFilmScreen(Screen):
 			"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("UpdateTube.com")
+		self['title'] = Label(self.portal)
 		self['name'] = Label("Film Auswahl")
 		self['views'] = Label("")
 		self['runtime'] = Label("")
@@ -177,7 +194,7 @@ class updatetubeFilmScreen(Screen):
 		cat = self.phCatLink
 		search = re.search('/search/(.*)', cat, re.S)
 		if search:
-			url = 'http://www.updatetube.com/search/%s/%s' % (str(self.page), str(search.group(1)))
+			url = 'http://%s/search/%s/%s' % (self.baseurl, str(self.page), str(search.group(1)))
 		elif self.page == 1:
 			url = "%s" % (self.phCatLink)
 		else:

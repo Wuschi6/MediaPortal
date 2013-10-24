@@ -267,14 +267,10 @@ from additions.porn.gstreaminxxx import *
 config.mediaportal.showgstreaminxxx = ConfigYesNo(default = False)
 from additions.porn.hdporn import *
 config.mediaportal.showhdporn = ConfigYesNo(default = False)
-from additions.porn.hotshame import *
-config.mediaportal.showhotshame = ConfigYesNo(default = False)
 from additions.porn.megaskanks import *
 config.mediaportal.showmegaskanks = ConfigYesNo(default = False)
 from additions.porn.paradisehill import *
 config.mediaportal.showparadisehill = ConfigYesNo(default = False)
-from additions.porn.pinkrod import *
-config.mediaportal.showpinkrod = ConfigYesNo(default = False)
 #from additions.porn.playporn import *
 #config.mediaportal.showplayporn = ConfigYesNo(default = False)
 from additions.porn.pornerbros import *
@@ -297,12 +293,13 @@ from additions.porn.sexxxhd import *
 config.mediaportal.showsexxxhd = ConfigYesNo(default = False)
 from additions.porn.sunporno import *
 config.mediaportal.showsunporno = ConfigYesNo(default = False)
-from additions.porn.thenewporn import *
-config.mediaportal.showthenewporn = ConfigYesNo(default = False)
 from additions.porn.tube8 import *
 config.mediaportal.showtube8 = ConfigYesNo(default = False)
 from additions.porn.updatetube import *
 config.mediaportal.showupdatetube = ConfigYesNo(default = False)
+config.mediaportal.showthenewporn = ConfigYesNo(default = False)
+config.mediaportal.showpinkrod = ConfigYesNo(default = False)
+config.mediaportal.showhotshame = ConfigYesNo(default = False)
 from additions.porn.wetplace import *
 config.mediaportal.showwetplace = ConfigYesNo(default = False)
 from additions.porn.xhamster import *
@@ -1643,8 +1640,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.pornscreen = gstreaminxxxGenreScreen
 		elif auswahl == "HDPorn":
 			self.pornscreen = hdpornGenreScreen
-		elif auswahl == "hotshame":
-			self.pornscreen = hotshameGenreScreen
 		elif auswahl == "MegaSkanks":
 			self.pornscreen = megaskanksGenreScreen
 		elif auswahl == "STREAMIT-XXX":
@@ -1655,8 +1650,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.cat = "porn"
 		elif auswahl == "ParadiseHill":
 			self.pornscreen = paradisehillGenreScreen
-		elif auswahl == "Pinkrod":
-			self.pornscreen = pinkrodGenreScreen
 		#elif auswahl == "PlayPorn":
 		#	self.pornscreen = playpornGenreScreen
 		elif auswahl == "PornerBros":
@@ -1679,12 +1672,20 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.pornscreen = sexxxhdGenreScreen
 		elif auswahl == "SunPorno":
 			self.pornscreen = sunpornoGenreScreen
-		elif auswahl == "TheNewPorn":
-			self.pornscreen = thenewpornGenreScreen
 		elif auswahl == "Tube8":
 			self.pornscreen = tube8GenreScreen
 		elif auswahl == "UpdateTube":
 			self.pornscreen = updatetubeGenreScreen
+			self.cat = "updatetube"
+		elif auswahl == "hotshame":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "hotshame"
+		elif auswahl == "TheNewPorn":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "thenewporn"
+		elif auswahl == "Pinkrod":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "pinkrod"
 		elif auswahl == "WetPlace":
 			self.pornscreen = wetplaceGenreScreen
 		elif auswahl == "xHamster":
@@ -2740,8 +2741,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.pornscreen = gstreaminxxxGenreScreen
 		elif auswahl == "HDPorn":
 			self.pornscreen = hdpornGenreScreen
-		elif auswahl == "hotshame":
-			self.pornscreen = hotshameGenreScreen
 		elif auswahl == "MegaSkanks":
 			self.pornscreen = megaskanksGenreScreen
 		elif auswahl == "STREAMIT-XXX":
@@ -2752,8 +2751,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.cat = "porn"
 		elif auswahl == "ParadiseHill":
 			self.pornscreen = paradisehillGenreScreen
-		elif auswahl == "Pinkrod":
-			self.pornscreen = pinkrodGenreScreen
 		#elif auswahl == "PlayPorn":
 		#	self.pornscreen = playpornGenreScreen
 		elif auswahl == "PornerBros":
@@ -2776,12 +2773,20 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.pornscreen = sexxxhdGenreScreen
 		elif auswahl == "SunPorno":
 			self.pornscreen = sunpornoGenreScreen
-		elif auswahl == "TheNewPorn":
-			self.pornscreen = thenewpornGenreScreen
 		elif auswahl == "Tube8":
 			self.pornscreen = tube8GenreScreen
 		elif auswahl == "UpdateTube":
 			self.pornscreen = updatetubeGenreScreen
+			self.cat = "updatetube"
+		elif auswahl == "TheNewPorn":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "thenewporn"
+		elif auswahl == "Pinkrod":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "pinkrod"
+		elif auswahl == "hotshame":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "hotshame"
 		elif auswahl == "WetPlace":
 			self.pornscreen = wetplaceGenreScreen
 		elif auswahl == "xHamster":
