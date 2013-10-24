@@ -15,8 +15,17 @@ def pornoidEntry1(entry):
 
 class pornoidGenreScreen(Screen):
 
-	def __init__(self, session):
+	def __init__(self, session, mode):
 		self.session = session
+		self.mode = mode
+		
+		if self.mode == "pornoid":
+			self.portal = "Pornoid.com"
+			self.baseurl = "www.pornoid.com"
+		if self.mode == "befuck":
+			self.portal = "BeFuck.com"
+			self.baseurl = "www.befuck.com"
+		
 		self.plugin_path = mp_globals.pluginPath
 		self.skin_path =  mp_globals.pluginPath + "/skins"
 
@@ -39,7 +48,7 @@ class pornoidGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("PornoID.com")
+		self['title'] = Label(self.portal)
 		self['ContentTitle'] = Label("Genre:")
 		self['name'] = Label("")
 		self['F1'] = Label("Exit")
@@ -51,6 +60,7 @@ class pornoidGenreScreen(Screen):
 		self['F4'].hide()
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
+		self.suchString = ''
 
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -61,15 +71,21 @@ class pornoidGenreScreen(Screen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		url = "http://www.pornoid.com/categories/"
+		url = "http://%s/categories/" % self.baseurl
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		raw = re.findall('class="ic">.*?<a\shref="(.*?)".*?src="(.*?)">.*?<figcaption>(.*?)</figcaption>.*?</span><b>(.*?)</b></p>', data, re.S)
+		raw = re.findall('class="ic">.*?<a\shref="(.*?)".*?src="(.*?)">.*?<figcaption>(.*?)</figcaption>.*?</span><b>', data, re.S)
 		if raw:
 			self.filmliste = []
-			for (Url, Image, Title, Videos) in raw:
-				self.filmliste.append((decodeHtml(Title), Url, Image, Videos))
+			for (Url, Image, Title) in raw:
+				Title = Title.strip().title()
+				self.filmliste.append((decodeHtml(Title), Url, Image))
+			self.filmliste.sort()
+			self.filmliste.insert(0, ("Most Popular", "http://%s/most-popular/" % self.baseurl, None))
+			self.filmliste.insert(0, ("Top Rated", "http://%s/" % self.baseurl, None))
+			self.filmliste.insert(0, ("Newest", "http://%s/" % self.baseurl, None))
+			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(pornoidEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
@@ -78,10 +94,20 @@ class pornoidGenreScreen(Screen):
 		printl(error,self,"E")
 
 	def showInfos(self):
-		Title = self['genreList'].getCurrent()[0][0].strip()
+		Title = self['genreList'].getCurrent()[0][0]
 		ImageUrl = self['genreList'].getCurrent()[0][2]
 		self['name'].setText(Title)
 		CoverHelper(self['coverArt']).getCover(ImageUrl)
+
+	def suchen(self):
+		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
+
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			self.suchString = callback.replace(' ', '+')
+			Link = 'http://%s/searchpages/?q=%s&page=' % (self.baseurl, self.suchString)
+			Name = self['genreList'].getCurrent()[0][0]
+			self.session.open(pornoidListScreen, Link, Name, self.portal)
 
 	def keyLeft(self):
 		if self.keyLocked:
@@ -111,18 +137,22 @@ class pornoidGenreScreen(Screen):
 		if self.keyLocked:
 			return
 		Name = self['genreList'].getCurrent()[0][0]
-		Link = self['genreList'].getCurrent()[0][1]
-		self.session.open(pornoidListScreen, Link, Name)
+		if Name == "--- Search ---":
+			self.suchen()
+		else:
+			Link = self['genreList'].getCurrent()[0][1]
+			self.session.open(pornoidListScreen, Link, Name, self.portal)
 
 	def keyCancel(self):
 		self.close()
 
 class pornoidListScreen(Screen):
 
-	def __init__(self, session, Link, Name):
+	def __init__(self, session, Link, Name, portal):
 		self.session = session
 		self.Link = Link
 		self.Name = Name
+		self.portal = portal
 		self.plugin_path = mp_globals.pluginPath
 		self.skin_path =  mp_globals.pluginPath + "/skins"
 
@@ -144,17 +174,17 @@ class pornoidListScreen(Screen):
 		"right" : self.keyRight,
 		"left" : self.keyLeft,
 		"nextBouquet" : self.keyPageUp,
-		"prevBouquet" : self.keyPageDown
+		"prevBouquet" : self.keyPageDown,
+		"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("PornoID.com")
+		self['title'] = Label(self.portal)
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['name'] = Label("")
 		self['F1'] = Label("Exit")
-		self['F2'] = Label("")
+		self['F2'] = Label("Page")
 		self['F3'] = Label("")
 		self['F4'] = Label("")
-		self['F2'].hide()
 		self['F3'].hide()
 		self['F4'].hide()
 		self['coverArt'] = Pixmap()
@@ -178,20 +208,21 @@ class pornoidListScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		parselastpage = re.findall('<nav\sid="pgn">(.*?)</nav>', data, re.S)
-		lastpage = re.findall('<a href=".*?" title=".*?"><div></div>(.*?)</a>', parselastpage[0], re.S)
-		if lastpage:
+		parselastpage = re.search('<nav\sid="pgn">(.*?)</nav>', data, re.S)
+		if parselastpage:
+			lastpage = re.findall('<a.*?href=".*?>.*?(\d+)</a>', parselastpage.group(1), re.S)
 			self.lastpage = int(lastpage[-1])
 			self['page'].setText("%s / %s" % (str(self.page), str(self.lastpage)))
 		else:
 			self.lastpage = 1
 			self['page'].setText("%s / 1" % str(self.page))
 
-		raw = re.findall('<div\sclass="favs">.*?</div>.*?href="(.*?)" title="(.*?)">.*?src="(.*?)".*?<span>(.*?)</span>', data, re.S)
+		raw = re.findall('<div\sclass="ic">.*?href="(http://\D+/videos/.*?)"\stitle="(.*?)">.*?src="(.*?)".*?<span>(.*?)</span>', data, re.S)
 		if raw:
-			for (Link, Title, Image, Lenght) in raw:
-				Title = Title.strip()
-				self.filmliste.append((decodeHtml(Title), Link, Image, Lenght))
+			for (Link, Title, Image, Length) in raw:
+				if not re.match(".*?pornsharia.com", Link, re.S):
+					Title = Title.strip()
+					self.filmliste.append((decodeHtml(Title), Link, Image, Length))
 			self.chooseMenuList.setList(map(pornoidEntry1, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
 		self.keyLocked = False
@@ -201,8 +232,26 @@ class pornoidListScreen(Screen):
 		printl(error,self,"E")
 
 	def showInfos(self):
+		runtime = self['liste'].getCurrent()[0][3]
+		self['handlung'].setText("\n\nRuntime: %s" % runtime)
 		coverUrl = self['liste'].getCurrent()[0][2]
 		CoverHelper(self['coverArt']).getCover(coverUrl)
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			answer = re.findall('\d+', answer)
+		else:
+			return
+		if answer:
+			if int(answer[0]) < self.lastpage + 1:
+				self.page = int(answer[0])
+				self.loadPage()
+			else:
+				self.page = self.lastpage
+				self.loadPage()
 
 	def keyPageDown(self):
 		print "PageDown"
@@ -252,9 +301,9 @@ class pornoidListScreen(Screen):
 
 	def getStreamData(self, data):
 		self.title = self['liste'].getCurrent()[0][0]
-		videoLink = re.findall("video_url:\s'(.*?)'", data, re.S)
+		videoLink = re.search("video_url:\s'(.*?)'", data, re.S)
 		if videoLink:
-			self.session.open(SimplePlayer, [(self.title, videoLink[0])], showPlaylist=False, ltype='pornoid')
+			self.session.open(SimplePlayer, [(self.title, videoLink.group(1))], showPlaylist=False, ltype='pornoid')
 
 	def keyCancel(self):
 		self.close()

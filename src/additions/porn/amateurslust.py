@@ -85,7 +85,7 @@ class amateurslustGenreScreen(Screen):
 		printl(error,self,"E")
 
 	def showInfos(self):
-		Title = self['genreList'].getCurrent()[0][0].strip()
+		Title = self['genreList'].getCurrent()[0][0]
 		ImageUrl = self['genreList'].getCurrent()[0][2]
 		self['name'].setText(Title)
 		CoverHelper(self['coverArt']).getCover(ImageUrl)
@@ -209,7 +209,7 @@ class amateurslustListScreen(Screen):
 		else:
 			self.lastpage = 1
 			self['page'].setText("%s / 1" % str(self.page))
-		
+
 		parse = re.search('class="content">(.*?)id="right-banners-main', data, re.S)
 		raw = re.findall('<a\shref="(.*?)".*?<h3>(.*?)</h3>.*?src="(.*?)"\s/>.*?<span>(.*?)</span>', parse.group(1), re.S)
 		if raw:
@@ -293,10 +293,9 @@ class amateurslustListScreen(Screen):
 
 	def getStreamData(self, data):
 		self.title = self['liste'].getCurrent()[0][0]
-		videoLink = re.findall("'video'.*?:.*?'(.*?)'", data, re.S)
-		url = videoLink[0] + "?start=0"
+		url = re.search("'video'.*?:.*?'(.*?)'", data, re.S)
 		if url:
-			self.session.open(SimplePlayer, [(self.title, url)], showPlaylist=False, ltype='amateurslust')
+			self.session.open(SimplePlayer, [(self.title, url.group(1))], showPlaylist=False, ltype='amateurslust')
 
 	def keyCancel(self):
 		self.close()
