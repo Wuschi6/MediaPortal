@@ -51,6 +51,7 @@ class amateurslustGenreScreen(Screen):
 		self['F4'].hide()
 		self['coverArt'] = Pixmap()
 		self.keyLocked = True
+		self.suchString = ''
 
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
@@ -65,12 +66,17 @@ class amateurslustGenreScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		parse = re.findall('<h1>Porn\sCategories</h1>(.*?)id="right-banners-main', data, re.S)
-		raw = re.findall('<a\shref="(.*?)".*?<h3>(.*?)</h3>.*?src="(.*?)"\s/>', parse[0], re.S)
+		parse = re.search('<h1>Porn\sCategories</h1>(.*?)id="right-banners-main', data, re.S)
+		raw = re.findall('<a\shref="(.*?)".*?<h3>(.*?)</h3>.*?src="(.*?)"\s/>', parse.group(1), re.S)
 		if raw:
 			self.filmliste = []
 			for (Url, Title, Image) in raw:
+				Url = "http://www.amateurslust.com" + Url + "page"
 				self.filmliste.append((decodeHtml(Title), Url, Image))
+			self.filmliste.sort()
+			self.filmliste.insert(0, ("Top Rated", "http://www.amateurslust.com/page", None))
+			self.filmliste.insert(0, ("Newest", "http://www.amateurslust.com/page", None))
+			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(amateurslustEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
@@ -83,6 +89,16 @@ class amateurslustGenreScreen(Screen):
 		ImageUrl = self['genreList'].getCurrent()[0][2]
 		self['name'].setText(Title)
 		CoverHelper(self['coverArt']).getCover(ImageUrl)
+
+	def suchen(self):
+		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
+
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			self.suchString = callback.replace(' ', '-')
+			Link = 'http://www.amateurslust.com/search/%s/page' % (self.suchString)
+			Name = self['genreList'].getCurrent()[0][0]
+			self.session.open(amateurslustListScreen, Link, Name)
 
 	def keyLeft(self):
 		if self.keyLocked:
@@ -112,8 +128,11 @@ class amateurslustGenreScreen(Screen):
 		if self.keyLocked:
 			return
 		Name = self['genreList'].getCurrent()[0][0]
-		Link = self['genreList'].getCurrent()[0][1]
-		self.session.open(amateurslustListScreen, Link, Name)
+		if Name == "--- Search ---":
+			self.suchen()
+		else:
+			Link = self['genreList'].getCurrent()[0][1]
+			self.session.open(amateurslustListScreen, Link, Name)
 
 	def keyCancel(self):
 		self.close()
@@ -145,17 +164,17 @@ class amateurslustListScreen(Screen):
 		"right" : self.keyRight,
 		"left" : self.keyLeft,
 		"nextBouquet" : self.keyPageUp,
-		"prevBouquet" : self.keyPageDown
+		"prevBouquet" : self.keyPageDown,
+		"green" : self.keyPageNumber
 		}, -1)
 
 		self['title'] = Label("AmateursLust.com")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['name'] = Label("")
 		self['F1'] = Label("Exit")
-		self['F2'] = Label("")
+		self['F2'] = Label("Page")
 		self['F3'] = Label("")
 		self['F4'] = Label("")
-		self['F2'].hide()
 		self['F3'].hide()
 		self['F4'].hide()
 		self['coverArt'] = Pixmap()
@@ -175,21 +194,24 @@ class amateurslustListScreen(Screen):
 	def loadPage(self):
 		self.keyLocked = True
 		self.filmliste = []
-		url = "http://www.amateurslust.com" + self.Link + "page" + str(self.page) + "/"
+		if self.Name == "Top Rated":
+			url = self.Link + str(self.page) + "/?sort=rating"
+		else:
+			url = self.Link + str(self.page) + "/"
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
 		parselastpage = re.findall('<ul\sclass="paging">(.*?)<div\sclass="banners-horizontal">', data, re.S)
-		lastpage = re.findall('<li><a\shref=".*?"\stitle="View page.*?">(.*?)</a></li>', parselastpage[0], re.S)
+		lastpage = re.findall('.*?(\d+)<', parselastpage[-1], re.S)
 		if lastpage:
 			self.lastpage = int(lastpage[-1])
 			self['page'].setText("%s / %s" % (str(self.page), str(self.lastpage)))
 		else:
 			self.lastpage = 1
 			self['page'].setText("%s / 1" % str(self.page))
-
-		parse = re.findall('<h1>.*?videos</h1>(.*?)id="right-banners-main', data, re.S)
-		raw = re.findall('<a\shref="(.*?)".*?<h3>(.*?)</h3>.*?src="(.*?)"\s/>.*?<span>(.*?)</span>', parse[0], re.S)
+		
+		parse = re.search('class="content">(.*?)id="right-banners-main', data, re.S)
+		raw = re.findall('<a\shref="(.*?)".*?<h3>(.*?)</h3>.*?src="(.*?)"\s/>.*?<span>(.*?)</span>', parse.group(1), re.S)
 		if raw:
 			for (Link, Title, Image, Duration) in raw:
 				self.filmliste.append((decodeHtml(Title), Link, Image, Duration))
@@ -202,8 +224,26 @@ class amateurslustListScreen(Screen):
 		printl(error,self,"E")
 
 	def showInfos(self):
+		runtime = self['liste'].getCurrent()[0][3]
+		self['handlung'].setText("\n\nRuntime: %s" % runtime)
 		coverUrl = self['liste'].getCurrent()[0][2]
 		CoverHelper(self['coverArt']).getCover(coverUrl)
+
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			answer = re.findall('\d+', answer)
+		else:
+			return
+		if answer:
+			if int(answer[0]) < self.lastpage + 1:
+				self.page = int(answer[0])
+				self.loadPage()
+			else:
+				self.page = self.lastpage
+				self.loadPage()
 
 	def keyPageDown(self):
 		print "PageDown"
