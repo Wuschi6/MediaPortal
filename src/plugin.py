@@ -184,6 +184,8 @@ from additions.fun.wissen import *
 config.mediaportal.wissen = ConfigYesNo(default = True)
 from additions.fun.bild import *
 config.mediaportal.bildde = ConfigYesNo(default = True)
+from additions.fun.southpark import *
+config.mediaportal.southpark = ConfigYesNo(default = True)
 
 # Mediatheken
 from additions.mediatheken.myvideo import *
@@ -502,6 +504,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.fun.append(getConfigListEntry("SportBild", config.mediaportal.showSportBild))
 		self.fun.append(getConfigListEntry("Wissen", config.mediaportal.wissen))
 		self.fun.append(getConfigListEntry("Bild.de", config.mediaportal.bildde))
+		self.fun.append(getConfigListEntry("Southpark.de", config.mediaportal.southpark))
 		if astModule:
 			self.fun.append(getConfigListEntry("HeiseVideo", config.mediaportal.showHeiseVideo))
 		self.fun.sort(key=lambda t : t[0].lower())
@@ -907,6 +910,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.funsport.append(self.hauptListEntry("Sport1.fm", "sport1fm"))
 		if config.mediaportal.bildde.value:
 			self.funsport.append(self.hauptListEntry("Bild.de", "bild"))
+		if config.mediaportal.southpark.value:
+			self.funsport.append(self.hauptListEntry("Southpark.de", "southpark"))
 		if config.mediaportal.showgrauzone.value:
 			if config.mediaportal.showMusicstreamcc.value:
 				self.funsport.append(self.hauptListEntry("Musicstream.cc", "musicstreamcc"))
@@ -1617,6 +1622,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(wissensthekGenreScreen)
 		elif auswahl == "N24 Mediathek":
 			self.session.open(n24GenreScreen)
+		elif auswahl == "Southpark.de":
+			self.session.open(SouthparkGenreScreen)
 
 		# Porn
 		elif auswahl == "4Tube":
@@ -1948,6 +1955,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Wissen.de", "wissen", "Fun"))
 		if config.mediaportal.bildde.value:
 			self.plugin_liste.append(("Bild.de", "bild", "Fun"))
+		if config.mediaportal.southpark.value:
+			self.plugin_liste.append(("Southpark.de", "southpark", "Fun"))
 		if astModule:
 			if config.mediaportal.showHeiseVideo.value:
 				self.plugin_liste.append(("heiseVIDEO", "heisevideo", "Fun"))
@@ -2648,6 +2657,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(SerienFirstScreen)
 		elif auswahl == "Top1000 IMDb":
 			self.session.open(timdbGenreScreen)
+		elif auswahl == "Southpark.de":
+			self.session.open(SouthparkGenreScreen)
 
 		# mediatheken
 		elif auswahl == "VOXNOW":
