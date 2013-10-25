@@ -22,11 +22,11 @@ class get_stream_link:
 		self._callback = None
 		self.session = session
 		self.showmsgbox = True
-		self.tw_agent_hlp = TwAgentHelper()
-		
-		if config.mediaportal.premiumize_use.value:
-			self.puser = config.mediaportal.premiumize_username.value
-			self.ppass = config.mediaportal.premiumize_password.value
+		useProxy = config.mediaportal.premiumize_use.value
+		self.puser = config.mediaportal.premiumize_username.value
+		self.ppass = config.mediaportal.premiumize_password.value
+
+		self.tw_agent_hlp = TwAgentHelper(use_proxy=useProxy, p_user=self.puser, p_pass=self.ppass)
 
 	def check_link(self, data, got_link, showmsgbox=True):
 		print "check_link"
@@ -37,6 +37,7 @@ class get_stream_link:
 				link = data.replace('file','embed')
 				#print "ok:", link
 				if config.mediaportal.premiumize_use.value:
+					"""
 					proxyStr = "http://%s:%s@scorpion.premiumize.me:80" % (self.puser, self.ppass)
 					proxy = urllib2.ProxyHandler({'http': proxyStr})
 					auth = urllib2.HTTPBasicAuthHandler()
@@ -49,7 +50,9 @@ class get_stream_link:
 						self._callback(stream_url[0])
 					else:
 						self.stream_not_found()
-					
+					"""
+					self.tw_agent_hlp.getWebPage(self.streamProxyPutlockerSockshare, self.errorload, link, False)
+
 				else:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.streamPutlockerSockshare, link, "putlocker").addErrback(self.errorload)
 
@@ -57,6 +60,7 @@ class get_stream_link:
 				link = data.replace('file','embed')
 				#print link
 				if config.mediaportal.premiumize_use.value:
+					"""
 					proxyStr = "http://%s:%s@scorpion.premiumize.me:80" % (self.puser, self.ppass)
 					proxy = urllib2.ProxyHandler({'http': proxyStr})
 					auth = urllib2.HTTPBasicAuthHandler()
@@ -69,7 +73,9 @@ class get_stream_link:
 						self._callback(stream_url[0])
 					else:
 						self.stream_not_found()
-
+					"""
+					self.tw_agent_hlp.getWebPage(self.streamProxyPutlockerSockshare, self.errorload, link, False)
+					
 				else:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.streamPutlockerSockshare, link, "sockshare").addErrback(self.errorload)
 
@@ -216,6 +222,7 @@ class get_stream_link:
 			elif re.search('http://.*?bitshare.com', data, re.S):
 				link = data
 				if config.mediaportal.premiumize_use.value:
+					"""
 					proxyStr = "http://%s:%s@scorpion.premiumize.me:80" % (self.puser, self.ppass)
 					proxy = urllib2.ProxyHandler({'http': proxyStr})
 					auth = urllib2.HTTPBasicAuthHandler()
@@ -228,6 +235,8 @@ class get_stream_link:
 						self._callback(stream_url[0])
 					else:
 						self.stream_not_found()
+					"""
+					self.tw_agent_hlp.getWebPage(self.streamProxyPutlockerSockshare, self.errorload, link, False)
 				else:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.bitshare).addErrback(self.errorload)
 
@@ -1308,6 +1317,13 @@ class get_stream_link:
 						self.stream_not_found()
 			else:
 				self.stream_not_found()
+		else:
+			self.stream_not_found()
+
+	def streamProxyPutlockerSockshare(self, data):
+		m = re.search("'file': '(.*?)'", data, re.S)
+		if m:
+			self._callback(m.group(1))
 		else:
 			self.stream_not_found()
 
