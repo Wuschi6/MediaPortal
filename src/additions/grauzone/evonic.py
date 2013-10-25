@@ -139,13 +139,17 @@ class showevonicGenre(Screen):
 			self['ContentTitle'].setText("Login fehlgeschlagen !")
 
 	def accountInfos(self, data):
-		statusUrl = 'http://evonic.tv/forum/payments.php'
-		getPage(statusUrl, method="GET",
-				headers={'Content-Type': 'application/x-www-form-urlencoded'},
-				followRedirect=True, timeout=30, cookies=ck).addCallback(self.accountInfosData).addErrback(self.dataError)
+		print "hole member status infos.."
+		if re.match('.*?Status:.*?Premium Member', data, re.S|re.I):
+			statusUrl = 'http://evonic.tv/forum/payments.php'
+			getPage(statusUrl, method="GET",
+					headers={'Content-Type': 'application/x-www-form-urlencoded'},
+					followRedirect=True, timeout=30, cookies=ck).addCallback(self.accountInfosData).addErrback(self.dataError)
+		else:
+			self['ContentTitle'].setText("Du bist kein Premium Member !")
 
 	def accountInfosData(self, data):
-		print "hole infos.."
+		print "hole account infos.."
 		infos = re.findall('<dt>Startdatum</dt>.*?<dd>(.*?)</dd>.*?<dt>L.*?t aus am</dt>.*?<dd>(.*?)</dd>.*?<p class="description">(.*?)</p>', data, re.S)
 		if infos:
 			print infos
@@ -154,14 +158,14 @@ class showevonicGenre(Screen):
 			print acci
 			self['ContentTitle'].setText(str(acci))
 
+	def loginDone(self, data):
+		getPage(self.loginUrl, method="GET", headers={'Content-Type': 'application/x-www-form-urlencoded'},
+				followRedirect=True, timeout=30, cookies=ck).addCallback(self.accountInfos).addErrback(self.dataError)
+
 		secutoken = re.findall('var SECURITYTOKEN = "(.*?)"', data, re.S)
 		if secutoken:
 			self.stoken = secutoken[0]
 			print "SECURITYTOKEN:", self.stoken
-
-	def loginDone(self, data):
-		getPage(self.loginUrl, method="GET", headers={'Content-Type': 'application/x-www-form-urlencoded'},
-				followRedirect=True, timeout=30, cookies=ck).addCallback(self.accountInfos).addErrback(self.dataError)
 
 		self.genreListe = []
 		self.genreListe.append(("Watchlist", "dump"))
