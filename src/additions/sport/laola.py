@@ -173,7 +173,7 @@ class laolaLiveScreen(Screen):
 			self.keyLocked = False
 			message = self.session.open(MessageBox, _("Event ist noch nicht gestartet."), MessageBox.TYPE_INFO, timeout=3)
 		else:
-			match_player = re.search('<iframe.*?src="(.*?)"', data, re.S)
+			match_player = re.search('<iframe.*?class="main_tv_player".*?src="(.*?)"', data, re.S)
 			if match_player:
 				getPage(match_player.group(1), headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getLiveData2).addErrback(self.dataError)
 			else:
