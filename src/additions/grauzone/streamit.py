@@ -1,6 +1,7 @@
 ﻿#	-*-	coding:	utf-8	-*-
 
 from Plugins.Extensions.MediaPortal.resources.imports import *
+from Plugins.Extensions.MediaPortal.resources.showAsThumb import ShowThumbscreen
 import Queue
 import threading
 from Plugins.Extensions.MediaPortal.resources.playhttpmovie import PlayHttpMovie
@@ -201,6 +202,7 @@ class streamitFilmListeScreen(Screen):
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions","DirectionActions"], {
 			"ok"    : self.keyOK,
 			"cancel": self.keyCancel,
+			"5" : self.keyShowThumb,
 			"up" : self.keyUp,
 			"down" : self.keyDown,
 			"right" : self.keyRight,
@@ -230,7 +232,7 @@ class streamitFilmListeScreen(Screen):
 		self.sortOrder = 0;
 		self.sortParStr = ["", "?orderby=title&order=ASC", "?imdb_rating=desc"]
 		self.genreTitle = "Filme in Genre "
-		self.sortOrderStr = [" - Sortierung neuste", " - Sortierung A-Z", " - Sortierung IMDb"]
+		self.sortOrderStr = [" - Sortierung neueste", " - Sortierung A-Z", " - Sortierung IMDb"]
 		self.sortOrderStrGenre = ""
 		self['title'] = Label(IS_Version)
 		self['ContentTitle'] = Label("")
@@ -255,6 +257,7 @@ class streamitFilmListeScreen(Screen):
 		self.picQ = Queue.Queue(0)
 		self.updateP = 0
 		self.keyLocked = True
+		self.toShowThumb = False
 		self.filmListe = []
 		self.keckse = {}
 		self.page = 0
@@ -348,6 +351,8 @@ class streamitFilmListeScreen(Screen):
 			self.chooseMenuList.setList(map(streamitFilmListEntry,	self.filmListe))
 			self.keyLocked = False
 			self.loadPicQueued()
+			if self.toShowThumb == True:
+				self._thumbcallback(self.filmListe, 0, 1, 2, None, None, self.page, self.pages)
 		else:
 			print "No movies found !"
 			self.filmListe.append(("No movies found !",""))
@@ -595,6 +600,24 @@ class streamitFilmListeScreen(Screen):
 
 	def keyTxtPageDown(self):
 		self['handlung'].pageDown()
+
+	def keyShowThumb(self):
+		if self.keyLocked:
+			return
+		self.toShowThumb = True
+		self.session.openWithCallback(self.ShowThumbCallback, ShowThumbscreen, self.ShowThumbCallback, self.filmListe, 0, 1, 2, None, None, self.page, self.pages)
+
+	def ShowThumbCallback(self, filmnummer=None, listmove=None, thumbcallback=None):
+		self._thumbcallback = thumbcallback
+		if listmove is None:
+			self['liste'].moveToIndex(filmnummer)
+			self.keyOK()
+		elif listmove == -9:
+			self.toShowThumb = False
+			self.loadPicQueued()
+		else:
+			self.page = int(listmove)
+			self.keyPageUp()
 
 	def keyCancel(self):
 		self.close()

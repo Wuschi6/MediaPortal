@@ -184,6 +184,8 @@ from additions.fun.wissen import *
 config.mediaportal.wissen = ConfigYesNo(default = True)
 from additions.fun.bild import *
 config.mediaportal.bildde = ConfigYesNo(default = True)
+from additions.fun.southpark import *
+config.mediaportal.southpark = ConfigYesNo(default = True)
 
 # Mediatheken
 from additions.mediatheken.myvideo import *
@@ -228,6 +230,19 @@ from additions.mediatheken.wissensthek import *
 config.mediaportal.wissensthek = ConfigYesNo(default = True)
 from additions.mediatheken.n24 import *
 config.mediaportal.n24 = ConfigYesNo(default = True)
+from additions.mediatheken.myvideo_tv import *
+config.mediaportal.showmyvideoserien = ConfigYesNo(default = True)
+config.mediaportal.showbbcserien = ConfigYesNo(default = True)
+config.mediaportal.showyfe = ConfigYesNo(default = True)
+config.mediaportal.showsonyretro = ConfigYesNo(default = True)
+config.mediaportal.showanimetv = ConfigYesNo(default = True)
+config.mediaportal.showProSieben = ConfigYesNo(default = True)
+config.mediaportal.showProSiebenMAXX = ConfigYesNo(default = True)
+config.mediaportal.showSat1 = ConfigYesNo(default = True)
+config.mediaportal.showSat1Gold = ConfigYesNo(default = True)
+config.mediaportal.showkabeleins = ConfigYesNo(default = True)
+config.mediaportal.showsixx = ConfigYesNo(default = True)
+config.mediaportal.showyep = ConfigYesNo(default = True)
 
 # Porn
 from additions.porn.x4tube import *
@@ -254,14 +269,10 @@ from additions.porn.gstreaminxxx import *
 config.mediaportal.showgstreaminxxx = ConfigYesNo(default = False)
 from additions.porn.hdporn import *
 config.mediaportal.showhdporn = ConfigYesNo(default = False)
-from additions.porn.hotshame import *
-config.mediaportal.showhotshame = ConfigYesNo(default = False)
 from additions.porn.megaskanks import *
 config.mediaportal.showmegaskanks = ConfigYesNo(default = False)
 from additions.porn.paradisehill import *
 config.mediaportal.showparadisehill = ConfigYesNo(default = False)
-from additions.porn.pinkrod import *
-config.mediaportal.showpinkrod = ConfigYesNo(default = False)
 #from additions.porn.playporn import *
 #config.mediaportal.showplayporn = ConfigYesNo(default = False)
 from additions.porn.pornerbros import *
@@ -284,12 +295,13 @@ from additions.porn.sexxxhd import *
 config.mediaportal.showsexxxhd = ConfigYesNo(default = False)
 from additions.porn.sunporno import *
 config.mediaportal.showsunporno = ConfigYesNo(default = False)
-from additions.porn.thenewporn import *
-config.mediaportal.showthenewporn = ConfigYesNo(default = False)
 from additions.porn.tube8 import *
 config.mediaportal.showtube8 = ConfigYesNo(default = False)
 from additions.porn.updatetube import *
 config.mediaportal.showupdatetube = ConfigYesNo(default = False)
+config.mediaportal.showthenewporn = ConfigYesNo(default = False)
+config.mediaportal.showpinkrod = ConfigYesNo(default = False)
+config.mediaportal.showhotshame = ConfigYesNo(default = False)
 from additions.porn.wetplace import *
 config.mediaportal.showwetplace = ConfigYesNo(default = False)
 from additions.porn.xhamster import *
@@ -298,6 +310,11 @@ from additions.porn.xxxsave import *
 config.mediaportal.showxxxsave = ConfigYesNo(default = False)
 from additions.porn.youporn import *
 config.mediaportal.showyouporn = ConfigYesNo(default = False)
+from additions.porn.amateurslust import *
+config.mediaportal.amateurslust = ConfigYesNo(default = False)
+from additions.porn.pornoid import *
+config.mediaportal.pornoid = ConfigYesNo(default = False)
+config.mediaportal.befuck = ConfigYesNo(default = False)
 
 # Grauzone
 from additions.grauzone.evonic import *
@@ -484,6 +501,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.fun.append(getConfigListEntry("SportBild", config.mediaportal.showSportBild))
 		self.fun.append(getConfigListEntry("Wissen", config.mediaportal.wissen))
 		self.fun.append(getConfigListEntry("Bild.de", config.mediaportal.bildde))
+		self.fun.append(getConfigListEntry("Southpark.de", config.mediaportal.southpark))
 		if astModule:
 			self.fun.append(getConfigListEntry("HeiseVideo", config.mediaportal.showHeiseVideo))
 		self.fun.sort(key=lambda t : t[0].lower())
@@ -493,11 +511,22 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		#self.mediatheken.append(getConfigListEntry("arte Mediathek", config.mediaportal.showArte))
 		self.mediatheken.append(getConfigListEntry("KIKA+", config.mediaportal.showkika))
 		self.mediatheken.append(getConfigListEntry("KinderKino", config.mediaportal.showKinderKino))
-		self.mediatheken.append(getConfigListEntry("Myvideo", config.mediaportal.showMyvideo))
+		self.mediatheken.append(getConfigListEntry("MyVideo", config.mediaportal.showMyvideo))
 		self.mediatheken.append(getConfigListEntry("NetzKino", config.mediaportal.showNetzKino))
 		self.mediatheken.append(getConfigListEntry("N-TVNOW", config.mediaportal.showNTVnow))
 		self.mediatheken.append(getConfigListEntry("ORF TVthek", config.mediaportal.showORF))
 		self.mediatheken.append(getConfigListEntry("RTLNOW", config.mediaportal.showRTLnow))
+		self.mediatheken.append(getConfigListEntry("MyVideo Serien", config.mediaportal.showmyvideoserien))
+		self.mediatheken.append(getConfigListEntry("BBC Serien", config.mediaportal.showbbcserien))
+		self.mediatheken.append(getConfigListEntry("Your Family Entertainment", config.mediaportal.showyfe))
+		self.mediatheken.append(getConfigListEntry("Sony Retro", config.mediaportal.showsonyretro))
+		self.mediatheken.append(getConfigListEntry("Anime TV", config.mediaportal.showanimetv))
+		self.mediatheken.append(getConfigListEntry("ProSieben Mediathek", config.mediaportal.showProSieben))
+		self.mediatheken.append(getConfigListEntry("ProSieben MAXX Mediathek", config.mediaportal.showProSiebenMAXX))
+		self.mediatheken.append(getConfigListEntry("Sat.1 Mediathek", config.mediaportal.showSat1))
+		self.mediatheken.append(getConfigListEntry("Sat.1 Gold Mediathek", config.mediaportal.showSat1Gold))
+		self.mediatheken.append(getConfigListEntry("kabeleins Mediathek", config.mediaportal.showkabeleins))
+		self.mediatheken.append(getConfigListEntry("YEP! Mediathek", config.mediaportal.showyep))
 		self.mediatheken.append(getConfigListEntry("RTL2NOW", config.mediaportal.showRTL2now))
 		self.mediatheken.append(getConfigListEntry("RTLNITRONOW", config.mediaportal.showRTLnitro))
 		self.mediatheken.append(getConfigListEntry("SRF Player", config.mediaportal.showSRF))
@@ -537,6 +566,9 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.porn.append(getConfigListEntry("WetPlace", config.mediaportal.showwetplace))
 		self.porn.append(getConfigListEntry("xHamster", config.mediaportal.showXhamster))
 		self.porn.append(getConfigListEntry("YouPorn", config.mediaportal.showyouporn))
+		self.porn.append(getConfigListEntry("AmateursLust.com", config.mediaportal.amateurslust))
+		self.porn.append(getConfigListEntry("Pornoid.com", config.mediaportal.pornoid))
+		self.porn.append(getConfigListEntry("BeFuck.com", config.mediaportal.befuck))
 		if config.mediaportal.showgrauzone.value:
 			#self.porn.append(getConfigListEntry("PlayPorn", config.mediaportal.showplayporn))
 			self.porn.append(getConfigListEntry("PORNMVZ", config.mediaportal.showpornmvz))
@@ -875,6 +907,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.funsport.append(self.hauptListEntry("Sport1.fm", "sport1fm"))
 		if config.mediaportal.bildde.value:
 			self.funsport.append(self.hauptListEntry("Bild.de", "bild"))
+		if config.mediaportal.southpark.value:
+			self.funsport.append(self.hauptListEntry("Southpark.de", "southpark"))
 		if config.mediaportal.showgrauzone.value:
 			if config.mediaportal.showMusicstreamcc.value:
 				self.funsport.append(self.hauptListEntry("Musicstream.cc", "musicstreamcc"))
@@ -907,6 +941,30 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.mediatheken.append(self.hauptListEntry("VOXNOW", "voxnow"))
 		if config.mediaportal.showRTLnow.value:
 			self.mediatheken.append(self.hauptListEntry("RTLNOW", "rtlnow"))
+		if config.mediaportal.showmyvideoserien.value:
+			self.mediatheken.append(self.hauptListEntry("MyVideo Serien", "myvideoserien"))
+		if config.mediaportal.showbbcserien.value:
+			self.mediatheken.append(self.hauptListEntry("BBC Serien", "bbcserien"))
+		if config.mediaportal.showyfe.value:
+			self.mediatheken.append(self.hauptListEntry("Your Family Entertainment", "yfe"))
+		if config.mediaportal.showsonyretro.value:
+			self.mediatheken.append(self.hauptListEntry("Sony Retro", "sonyretro"))
+		if config.mediaportal.showanimetv.value:
+			self.mediatheken.append(self.hauptListEntry("Anime TV", "animetv"))
+		if config.mediaportal.showProSieben.value:
+			self.mediatheken.append(self.hauptListEntry("ProSieben Mediathek", "prosieben"))
+		if config.mediaportal.showProSiebenMAXX.value:
+			self.mediatheken.append(self.hauptListEntry("ProSieben MAXX Mediathek", "prosiebenmaxx"))
+		if config.mediaportal.showSat1.value:
+			self.mediatheken.append(self.hauptListEntry("Sat.1 Mediathek", "sat1"))
+		if config.mediaportal.showSat1Gold.value:
+			self.mediatheken.append(self.hauptListEntry("Sat.1 Gold Mediathek", "sat1gold"))
+		if config.mediaportal.showkabeleins.value:
+			self.mediatheken.append(self.hauptListEntry("kabeleins Mediathek", "kabeleins"))
+		if config.mediaportal.showsixx.value:
+			self.mediatheken.append(self.hauptListEntry("sixx Mediathek", "sixx"))
+		if config.mediaportal.showyep.value:
+			self.mediatheken.append(self.hauptListEntry("YEP! Mediathek", "yep"))
 		if config.mediaportal.showNTVnow.value:
 			self.mediatheken.append(self.hauptListEntry("N-TVNOW", "ntvnow"))
 		if config.mediaportal.showRTL2now.value:
@@ -1013,6 +1071,12 @@ class haupt_Screen(Screen, ConfigListScreen):
 					self.porn.append(self.hauptListEntry("XXXSaVe", "xxxsave"))
 			if config.mediaportal.showyouporn.value:
 				self.porn.append(self.hauptListEntry("YouPorn", "youporn"))
+			if config.mediaportal.amateurslust.value:
+				self.porn.append(self.hauptListEntry("AmateursLust.com", "amateurslust"))
+			if config.mediaportal.pornoid.value:
+				self.porn.append(self.hauptListEntry("Pornoid.com", "pornoid"))
+			if config.mediaportal.befuck.value:
+				self.porn.append(self.hauptListEntry("BeFuck.com", "befuck"))
 
 		# Grauzone
 		if config.mediaportal.showgrauzone.value:
@@ -1491,6 +1555,30 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(VOXnowGenreScreen)
 		elif auswahl == "RTLNOW":
 			self.session.open(RTLnowGenreScreen)
+		elif auswahl == "MyVideo Serien":
+			self.session.open(myvideotvGenreScreen, "Weitere_Serien", "MyVideo Serien")
+		elif auswahl == "BBC Serien":
+			self.session.open(myvideotvGenreScreen, "BBC", "BBC Serien")
+		elif auswahl == "Your Family Entertainment":
+			self.session.open(myvideotvGenreScreen, "Your_Family_Entertainment", "Your Family Entertainment")
+		elif auswahl == "Sony Retro":
+			self.session.open(myvideotvGenreScreen, "Sony_Retro", "Sony Retro")
+		elif auswahl == "Anime TV":
+			self.session.open(myvideotvGenreScreen, "Anime_TV", "Anime TV")
+		elif auswahl == "ProSieben Mediathek":
+			self.session.open(myvideotvGenreScreen, "ProSieben", "ProSieben Mediathek")
+		elif auswahl == "ProSieben MAXX Mediathek":
+			self.session.open(myvideotvGenreScreen, "ProSieben_MAXX", "ProSieben MAXX Mediathek")
+		elif auswahl == "Sat.1 Mediathek":
+			self.session.open(myvideotvGenreScreen, "Sat_1", "Sat.1 Mediathek")
+		elif auswahl == "Sat.1 Gold Mediathek":
+			self.session.open(myvideotvGenreScreen, "Sat_1_Gold", "Sat.1 Gold Mediathek")
+		elif auswahl == "kabeleins Mediathek":
+			self.session.open(myvideotvGenreScreen, "kabel_eins", "kabeleins Mediathek")
+		elif auswahl == "sixx Mediathek":
+			self.session.open(myvideotvGenreScreen, "sixx", "sixx Mediathek")
+		elif auswahl == "YEP! Mediathek":
+			self.session.open(myvideotvGenreScreen, "YEP", "YEP! Mediathek")
 		elif auswahl == "N-TVNOW":
 			self.session.open(NTVnowGenreScreen)
 		elif auswahl == "RTL2NOW":
@@ -1531,6 +1619,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(wissensthekGenreScreen)
 		elif auswahl == "N24 Mediathek":
 			self.session.open(n24GenreScreen)
+		elif auswahl == "Southpark.de":
+			self.session.open(SouthparkGenreScreen)
 
 		# Porn
 		elif auswahl == "4Tube":
@@ -1557,8 +1647,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.pornscreen = gstreaminxxxGenreScreen
 		elif auswahl == "HDPorn":
 			self.pornscreen = hdpornGenreScreen
-		elif auswahl == "hotshame":
-			self.pornscreen = hotshameGenreScreen
 		elif auswahl == "MegaSkanks":
 			self.pornscreen = megaskanksGenreScreen
 		elif auswahl == "STREAMIT-XXX":
@@ -1569,8 +1657,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.cat = "porn"
 		elif auswahl == "ParadiseHill":
 			self.pornscreen = paradisehillGenreScreen
-		elif auswahl == "Pinkrod":
-			self.pornscreen = pinkrodGenreScreen
 		#elif auswahl == "PlayPorn":
 		#	self.pornscreen = playpornGenreScreen
 		elif auswahl == "PornerBros":
@@ -1593,12 +1679,20 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.pornscreen = sexxxhdGenreScreen
 		elif auswahl == "SunPorno":
 			self.pornscreen = sunpornoGenreScreen
-		elif auswahl == "TheNewPorn":
-			self.pornscreen = thenewpornGenreScreen
 		elif auswahl == "Tube8":
 			self.pornscreen = tube8GenreScreen
 		elif auswahl == "UpdateTube":
 			self.pornscreen = updatetubeGenreScreen
+			self.cat = "updatetube"
+		elif auswahl == "hotshame":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "hotshame"
+		elif auswahl == "TheNewPorn":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "thenewporn"
+		elif auswahl == "Pinkrod":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "pinkrod"
 		elif auswahl == "WetPlace":
 			self.pornscreen = wetplaceGenreScreen
 		elif auswahl == "xHamster":
@@ -1607,6 +1701,14 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.pornscreen = xxxsaveFilmScreen
 		elif auswahl == "YouPorn":
 			self.pornscreen = youpornGenreScreen
+		elif auswahl == "AmateursLust.com":
+			self.pornscreen = amateurslustGenreScreen
+		elif auswahl == "Pornoid.com":
+			self.pornscreen = pornoidGenreScreen
+			self.cat = "pornoid"
+		elif auswahl == "BeFuck.com":
+			self.pornscreen = pornoidGenreScreen
+			self.cat = "befuck"
 
 		if self.pornscreen:
 			if config.mediaportal.pornpin.value:
@@ -1854,6 +1956,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Wissen.de", "wissen", "Fun"))
 		if config.mediaportal.bildde.value:
 			self.plugin_liste.append(("Bild.de", "bild", "Fun"))
+		if config.mediaportal.southpark.value:
+			self.plugin_liste.append(("Southpark.de", "southpark", "Fun"))
 		if astModule:
 			if config.mediaportal.showHeiseVideo.value:
 				self.plugin_liste.append(("heiseVIDEO", "heisevideo", "Fun"))
@@ -1875,6 +1979,30 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("VOXNOW", "voxnow", "Mediathek"))
 		if config.mediaportal.showRTLnow.value:
 			self.plugin_liste.append(("RTLNOW", "rtlnow", "Mediathek"))
+		if config.mediaportal.showmyvideoserien.value:
+			self.plugin_liste.append(("MyVideo Serien", "myvideoserien", "Mediathek"))
+		if config.mediaportal.showbbcserien.value:
+			self.plugin_liste.append(("BBC Serien", "bbcserien", "Mediathek"))
+		if config.mediaportal.showyfe.value:
+			self.plugin_liste.append(("Your Family Entertainment", "yfe", "Mediathek"))
+		if config.mediaportal.showsonyretro.value:
+			self.plugin_liste.append(("Sony Retro", "sonyretro", "Mediathek"))
+		if config.mediaportal.showanimetv.value:
+			self.plugin_liste.append(("Anime TV", "animetv", "Mediathek"))
+		if config.mediaportal.showProSieben.value:
+			self.plugin_liste.append(("ProSieben Mediathek", "prosieben", "Mediathek"))
+		if config.mediaportal.showProSiebenMAXX.value:
+			self.plugin_liste.append(("ProSieben MAXX Mediathek", "prosiebenmaxx", "Mediathek"))
+		if config.mediaportal.showSat1.value:
+			self.plugin_liste.append(("Sat.1 Mediathek", "sat1", "Mediathek"))
+		if config.mediaportal.showSat1Gold.value:
+			self.plugin_liste.append(("Sat.1 Gold Mediathek", "sat1gold", "Mediathek"))
+		if config.mediaportal.showkabeleins.value:
+			self.plugin_liste.append(("kabeleins Mediathek", "kabeleins", "Mediathek"))
+		if config.mediaportal.showsixx.value:
+			self.plugin_liste.append(("sixx Mediathek", "sixx", "Mediathek"))
+		if config.mediaportal.showyep.value:
+			self.plugin_liste.append(("YEP! Mediathek", "yep", "Mediathek"))
 		if config.mediaportal.showNTVnow.value:
 			self.plugin_liste.append(("N-TVNOW", "ntvnow", "Mediathek"))
 		if config.mediaportal.showRTL2now.value:
@@ -1983,6 +2111,12 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 					self.plugin_liste.append(("XXXSaVe", "xxxsave", "Porn"))
 			if config.mediaportal.showyouporn.value:
 				self.plugin_liste.append(("YouPorn", "youporn", "Porn"))
+			if config.mediaportal.amateurslust.value:
+				self.plugin_liste.append(("AmateursLust.com", "amateurslust", "Porn"))
+			if config.mediaportal.pornoid.value:
+				self.plugin_liste.append(("Pornoid.com", "pornoid", "Porn"))
+			if config.mediaportal.befuck.value:
+				self.plugin_liste.append(("BeFuck.com", "befuck", "Porn"))
 
 		# Grauzone
 		if (config.mediaportal.showgrauzone.value == False and config.mediaportal.filter.value == 'Grauzone'):
@@ -2524,12 +2658,38 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(SerienFirstScreen)
 		elif auswahl == "Top1000 IMDb":
 			self.session.open(timdbGenreScreen)
+		elif auswahl == "Southpark.de":
+			self.session.open(SouthparkGenreScreen)
 
 		# mediatheken
 		elif auswahl == "VOXNOW":
 			self.session.open(VOXnowGenreScreen)
 		elif auswahl == "RTLNOW":
 			self.session.open(RTLnowGenreScreen)
+		elif auswahl == "MyVideo Serien":
+			self.session.open(myvideotvGenreScreen, "Weitere_Serien", "MyVideo Serien")
+		elif auswahl == "BBC Serien":
+			self.session.open(myvideotvGenreScreen, "BBC", "BBC Serien")
+		elif auswahl == "Your Family Entertainment":
+			self.session.open(myvideotvGenreScreen, "Your_Family_Entertainment", "Your Family Entertainment")
+		elif auswahl == "Sony Retro":
+			self.session.open(myvideotvGenreScreen, "Sony_Retro", "Sony Retro")
+		elif auswahl == "Anime TV":
+			self.session.open(myvideotvGenreScreen, "Anime_TV", "Anime TV")
+		elif auswahl == "ProSieben Mediathek":
+			self.session.open(myvideotvGenreScreen, "ProSieben", "ProSieben Mediathek")
+		elif auswahl == "ProSieben MAXX Mediathek":
+			self.session.open(myvideotvGenreScreen, "ProSieben_MAXX", "ProSieben MAXX Mediathek")
+		elif auswahl == "Sat.1 Mediathek":
+			self.session.open(myvideotvGenreScreen, "Sat_1", "Sat.1 Mediathek")
+		elif auswahl == "Sat.1 Gold Mediathek":
+			self.session.open(myvideotvGenreScreen, "Sat_1_Gold", "Sat.1 Gold Mediathek")
+		elif auswahl == "kabeleins Mediathek":
+			self.session.open(myvideotvGenreScreen, "kabel_eins", "kabeleins Mediathek")
+		elif auswahl == "sixx Mediathek":
+			self.session.open(myvideotvGenreScreen, "sixx", "sixx Mediathek")
+		elif auswahl == "YEP! Mediathek":
+			self.session.open(myvideotvGenreScreen, "YEP", "YEP! Mediathek")
 		elif auswahl == "N-TVNOW":
 			self.session.open(NTVnowGenreScreen)
 		elif auswahl == "RTL2NOW":
@@ -2592,8 +2752,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.pornscreen = gstreaminxxxGenreScreen
 		elif auswahl == "HDPorn":
 			self.pornscreen = hdpornGenreScreen
-		elif auswahl == "hotshame":
-			self.pornscreen = hotshameGenreScreen
 		elif auswahl == "MegaSkanks":
 			self.pornscreen = megaskanksGenreScreen
 		elif auswahl == "STREAMIT-XXX":
@@ -2604,8 +2762,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.cat = "porn"
 		elif auswahl == "ParadiseHill":
 			self.pornscreen = paradisehillGenreScreen
-		elif auswahl == "Pinkrod":
-			self.pornscreen = pinkrodGenreScreen
 		#elif auswahl == "PlayPorn":
 		#	self.pornscreen = playpornGenreScreen
 		elif auswahl == "PornerBros":
@@ -2628,12 +2784,20 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.pornscreen = sexxxhdGenreScreen
 		elif auswahl == "SunPorno":
 			self.pornscreen = sunpornoGenreScreen
-		elif auswahl == "TheNewPorn":
-			self.pornscreen = thenewpornGenreScreen
 		elif auswahl == "Tube8":
 			self.pornscreen = tube8GenreScreen
 		elif auswahl == "UpdateTube":
 			self.pornscreen = updatetubeGenreScreen
+			self.cat = "updatetube"
+		elif auswahl == "TheNewPorn":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "thenewporn"
+		elif auswahl == "Pinkrod":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "pinkrod"
+		elif auswahl == "hotshame":
+			self.pornscreen = updatetubeGenreScreen
+			self.cat = "hotshame"
 		elif auswahl == "WetPlace":
 			self.pornscreen = wetplaceGenreScreen
 		elif auswahl == "xHamster":
@@ -2642,6 +2806,14 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.pornscreen = xxxsaveFilmScreen
 		elif auswahl == "YouPorn":
 			self.pornscreen = youpornGenreScreen
+		elif auswahl == "AmateursLust.com":
+			self.pornscreen = amateurslustGenreScreen
+		elif auswahl == "Pornoid.com":
+			self.pornscreen = pornoidGenreScreen
+			self.cat = "pornoid"
+		elif auswahl == "BeFuck.com":
+			self.pornscreen = pornoidGenreScreen
+			self.cat = "befuck"
 
 		if self.pornscreen:
 			if config.mediaportal.pornpin.value:
