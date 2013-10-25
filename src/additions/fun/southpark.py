@@ -61,7 +61,7 @@ class SouthparkGenreScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		raw = re.findall('<li>.*?<a\sclass="seasonbtn.*?"\shref="(.*?)">(.*?)</a>.*?</li>', data, re.S)
+		raw = re.findall('<a\sclass="seasonbtn.*?"\shref="(.*?)">(.*?)</a>.*?</li>', data, re.S)
 		if raw:
 			self.filmliste = []
 			for (Url, Title) in raw:
@@ -137,9 +137,11 @@ class SouthparkListScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		raw = re.findall('<li>.*?<a class="content_eppreview" href="(.*?)"><img src="(.*?)"width="120".*?<h5>(.*?)</h5>.*?<p>(.*?)</p>', data, re.S)
+		raw = re.findall('<li>.*?<a\sclass="content_eppreview"\shref="(.*?episoden/)(.*?)-(.*?)"><img\ssrc="(.*?)"width="120".*?<h5>(.*?)</h5>.*?<p>(.*?)</p>', data, re.S)
 		if raw:
-			for (Link, Image, Title, Handlung) in raw:
+			for (Link1, Episode, Link2, Image, Title, Handlung) in raw:
+				Title = Episode + " - " + Title
+				Link = Link1 + Episode + "-" + Link2
 				self.filmliste.append((decodeHtml(Title), Link, Image, Handlung))
 			self.chooseMenuList.setList(map(Entry1, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
@@ -214,7 +216,7 @@ class SouthparkAktScreen(Screen):
 
 		self["actions"] = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
 		"ok"	: self.keyOK,
-		"cancel": self.keyCancel
+		"cancel": self.keyCancel,
 		}, -1)
 
 		self['title'] = Label("Southpark.de")
@@ -247,14 +249,17 @@ class SouthparkAktScreen(Screen):
 
 	def getVidId(self, data):
 		vidid = re.findall('<script\ssrc="http://activities.niagara.comedycentral.com/register/spsi-de-DE/episodes/(.*?)"\stype="text/javascript"></script>', data, re.S)
-		url = "http://www.southpark.de/feeds/video-player/mrss/mgid:arc:episode:southpark.de:" + vidid[0]+ "%3Flang=de"
+		url = "http://www.southpark.de/feeds/video-player/mrss/mgid:arc:episode:southpark.de:" + vidid[0]+ "?lang=de"
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getxmls).addErrback(self.dataError)
 
 	def getxmls(self, data):
 		xmls = re.findall('<item>.*?<title>(.*?)</title>.*?<media:content\stype="text/xml".*?url="(.*?)"', data, re.S)
 		if xmls:
-			for (Title, Link) in xmls:
-				self.filmliste.append((decodeHtml(Title), Link))
+			count = 0
+			for match in xmls:
+				count +=1
+				if count != 1:
+					self.filmliste.append((decodeHtml(match[0]), match[1]))
 			self.chooseMenuList.setList(map(Entry1, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
 		self.keyLocked = False
@@ -274,13 +279,13 @@ class SouthparkAktScreen(Screen):
 		rtmpe_data = re.findall('<src>(rtmpe://.*?ondemand/)(.*?)</src>', data, re.S|re.I)
 		rtmpe = re.findall('<src>(.*?)</src>', data, re.S)
 		if rtmpe_data:
-			(host, playpath) = rtmpe_data[0]
+			(host, playpath) = rtmpe_data[-1]
 			if config.mediaportal.useRtmpDump.value:
 				final = "%s' --swfVfy=1 --playpath=mp4:%s --swfUrl=http://media.mtvnservices.com/player/pri…rime.1.12.5.swf'" % (host, playpath)
 				movieinfo = [final, title]
 				self.session.open(PlayRtmpMovie, movieinfo, title)
 			else:
-				final = "%s swfUrl=http://media.mtvnservices.com/player/pri…rime.1.12.5.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.link, playpath)
+				final = "%s swfUrl=http://media.mtvnservices.com/player/pri…rime.1.12.5.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.Link, playpath)
 				playlist = []
 				playlist.append((title, final))
 				self.session.open(SimplePlayer, playlist, showPlaylist=False, ltype='southpark')
