@@ -269,7 +269,7 @@ class SouthparkAktScreen(Screen):
 			for title, url in xmls:
 				if not re.match(".*?Intro\sHD", title):
 					url = url.replace('&amp;','&')
-					self.filmliste.append((decodeHtml(title), url))
+					self.filmliste.append((decodeHtml(title), url, self.Link))
 			self.chooseMenuList.setList(map(Entry1, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
 		self.keyLocked = False
@@ -286,9 +286,9 @@ class SouthparkAktScreen(Screen):
 
 	def StartStream(self, data):
 		title = self['liste'].getCurrent()[0][0]
-		rtmpe_data = re.findall('<src>(rtmpe://.*?ondemand/)(.*?)</src>', data, re.S|re.I)
+		rtmpe_data = re.findall('<rendition.*?bitrate="(450|750|1000|1200)".*?<src>(rtmpe://.*?ondemand/)(.*?.mp4)</src>.*?</rendition>', data, re.S|re.I)
 		if rtmpe_data:
-			(host, playpath) = rtmpe_data[-1]
+			(quality, host, playpath) = rtmpe_data[-1]
 			if config.mediaportal.useRtmpDump.value:
 				final = "%s' --playpath=mp4:%s'" % (host, playpath)
 				movieinfo = [final, title]
@@ -337,13 +337,13 @@ class SouthparkPlayer(SimplePlayer):
 
 	def getVideo(self):
 		self.title = self.playList[self.playIdx][0]
-		self.link = self.playList[self.playIdx][0]
+		self.pageurl = self.playList[self.playIdx][2]
 		url = self.playList[self.playIdx][1]
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.gotVideo).addErrback(self.dataError)
 
 	def gotVideo(self, data):
-		rtmpe_data = re.findall('<src>(rtmpe://.*?ondemand/)(.*?.mp4)</src>', data, re.S|re.I)
+		rtmpe_data = re.findall('<rendition.*?bitrate="(450|750|1000|1200)".*?<src>(rtmpe://.*?ondemand/)(.*?.mp4)</src>.*?</rendition>', data, re.S|re.I)
 		if rtmpe_data:
-			(host, playpath) = rtmpe_data[-1]
-			final = "%s playpath=mp4:%s" % (host, playpath)
+			(quality, host, playpath) = rtmpe_data[-1]
+			final = "%s playpath=mp4:%s pageUrl=%s" % (host, playpath, self.pageurl)
 		self.playStream(self.title, final)
