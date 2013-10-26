@@ -195,8 +195,7 @@ class dachixListScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		parselastpage = re.findall('class="main-sectionpaging">(.*?)</div>', data, re.S)
-		lastpage = re.findall('current"href=".*?=(.*?)"', parselastpage[-1], re.S)
+		lastpage = re.findall('current"href=".*?=(.*?)"', data, re.S)
 		if lastpage:
 			self.lastpage = int(lastpage[-1])
 			self['page'].setText("%s / %s" % (str(self.page), str(self.lastpage)))
