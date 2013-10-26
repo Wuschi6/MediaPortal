@@ -187,10 +187,10 @@ from additions.fun.wissen import *
 config.mediaportal.wissen = ConfigYesNo(default = True)
 from additions.fun.bild import *
 config.mediaportal.bildde = ConfigYesNo(default = True)
-from additions.fun.southpark import *
-config.mediaportal.southpark = ConfigYesNo(default = True)
 
 # Mediatheken
+from additions.mediatheken.southpark import *
+config.mediaportal.southpark = ConfigYesNo(default = True)
 from additions.mediatheken.myvideo import *
 config.mediaportal.showMyvideo = ConfigYesNo(default = True)
 from additions.mediatheken.netzkino import *
