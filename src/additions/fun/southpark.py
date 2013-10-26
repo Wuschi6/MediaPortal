@@ -6,7 +6,7 @@ from Plugins.Extensions.MediaPortal.resources.coverhelper import CoverHelper
 
 def Entry(entry):
 	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, "Staffel: " + entry[0])
+		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		]
 
 def Entry1(entry):
@@ -65,7 +65,8 @@ class SouthparkGenreScreen(Screen):
 		if raw:
 			self.filmliste = []
 			for (Url, Title) in raw:
-				self.filmliste.append((decodeHtml(Title), Url))
+				Title = "Staffel " + Title
+				self.filmliste.append((Title, Url))
 			self.chooseMenuList.setList(map(Entry, self.filmliste))
 			self.keyLocked = False
 
@@ -109,7 +110,7 @@ class SouthparkListScreen(Screen):
 		}, -1)
 
 		self['title'] = Label("Southpark.de")
-		self['ContentTitle'] = Label("Genre: Staffel: %s" % self.Name)
+		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['name'] = Label("")
 		self['F1'] = Label("Exit")
 		self['F2'] = Label("")
@@ -140,9 +141,11 @@ class SouthparkListScreen(Screen):
 		raw = re.findall('<li>.*?<a\sclass="content_eppreview"\shref="(.*?episoden/)(.*?)-(.*?)"><img\ssrc="(.*?)"width="120".*?<h5>(.*?)</h5>.*?<p>(.*?)</p>', data, re.S)
 		if raw:
 			for (Link1, Episode, Link2, Image, Title, Handlung) in raw:
-				Title = Episode + " - " + Title
+				Title = Episode.upper() + " - " + Title
 				Link = Link1 + Episode + "-" + Link2
+				Image = Image.replace("width=120","width=320")
 				self.filmliste.append((decodeHtml(Title), Link, Image, Handlung))
+			self.filmliste.sort()
 			self.chooseMenuList.setList(map(Entry1, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
 		self.keyLocked = False
@@ -217,16 +220,18 @@ class SouthparkAktScreen(Screen):
 		self["actions"] = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
 		"ok"	: self.keyOK,
 		"cancel": self.keyCancel,
+		"green"	: self.keyLocale
 		}, -1)
+
+		self.locale = config.mediaportal.southparklang.value
 
 		self['title'] = Label("Southpark.de")
 		self['ContentTitle'] = Label("Folge: %s" % self.Name)
 		self['name'] = Label("")
 		self['F1'] = Label("Exit")
-		self['F2'] = Label("")
+		self['F2'] = Label(self.locale)
 		self['F3'] = Label("")
 		self['F4'] = Label("")
-		self['F2'].hide()
 		self['F3'].hide()
 		self['F4'].hide()
 		self['coverArt'] = Pixmap()
@@ -235,6 +240,7 @@ class SouthparkAktScreen(Screen):
 		self['handlung'] = Label("")
 
 		self.keyLocked = True
+
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
 		self.chooseMenuList.l.setItemHeight(25)
@@ -249,17 +255,21 @@ class SouthparkAktScreen(Screen):
 
 	def getVidId(self, data):
 		vidid = re.findall('<script\ssrc="http://activities.niagara.comedycentral.com/register/spsi-de-DE/episodes/(.*?)"\stype="text/javascript"></script>', data, re.S)
-		url = "http://www.southpark.de/feeds/video-player/mrss/mgid:arc:episode:southpark.de:" + vidid[0]+ "?lang=de"
-		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getxmls).addErrback(self.dataError)
+		if vidid:
+			url = "http://www.southpark.de/feeds/video-player/mrss/mgid:arc:episode:southpark.de:" + vidid[0]+ "?lang=%s" % self.locale
+			getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getxmls).addErrback(self.dataError)
+		else:
+			message = self.session.open(MessageBox, _("Sorry, this video is not found or no longer available due to date or rights restrictions."), MessageBox.TYPE_INFO, timeout=5)
+			self.keyLocked = False
+			self.close()
 
 	def getxmls(self, data):
 		xmls = re.findall('<item>.*?<title>(.*?)</title>.*?<media:content\stype="text/xml".*?url="(.*?)"', data, re.S)
 		if xmls:
-			count = 0
-			for match in xmls:
-				count +=1
-				if count != 1:
-					self.filmliste.append((decodeHtml(match[0]), match[1]))
+			for title, url in xmls:
+				if not re.match(".*?Intro\sHD", title):
+					url = url.replace('&amp;','&')
+					self.filmliste.append((decodeHtml(title), url))
 			self.chooseMenuList.setList(map(Entry1, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
 		self.keyLocked = False
@@ -277,24 +287,63 @@ class SouthparkAktScreen(Screen):
 	def StartStream(self, data):
 		title = self['liste'].getCurrent()[0][0]
 		rtmpe_data = re.findall('<src>(rtmpe://.*?ondemand/)(.*?)</src>', data, re.S|re.I)
-		rtmpe = re.findall('<src>(.*?)</src>', data, re.S)
 		if rtmpe_data:
 			(host, playpath) = rtmpe_data[-1]
 			if config.mediaportal.useRtmpDump.value:
-				final = "%s' --swfVfy=1 --playpath=mp4:%s --swfUrl=http://media.mtvnservices.com/player/pri…rime.1.12.5.swf'" % (host, playpath)
+				final = "%s' --playpath=mp4:%s'" % (host, playpath)
 				movieinfo = [final, title]
 				self.session.open(PlayRtmpMovie, movieinfo, title)
 			else:
-				final = "%s swfUrl=http://media.mtvnservices.com/player/pri…rime.1.12.5.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.Link, playpath)
-				playlist = []
-				playlist.append((title, final))
-				self.session.open(SimplePlayer, playlist, showPlaylist=False, ltype='southpark')
+				idx = self['liste'].getSelectedIndex()
+				self.session.open(SouthparkPlayer, self.filmliste, int(idx) , True, False)
+		else:
+			message = self.session.open(MessageBox, _("Sorry, this video is not found or no longer available due to date or rights restrictions."), MessageBox.TYPE_INFO, timeout=5)
+		self.keyLocked = False
 
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		self.link = self['liste'].getCurrent()[0][1].replace('&amp;','&')
+		self.keyLocked = True
+		self.link = self['liste'].getCurrent()[0][1]
 		getPage(self.link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.StartStream).addErrback(self.dataError)
+
+	def keyLocale(self):
+		if self.keyLocked:
+			return
+		self.keyLocked = True
+		if self.locale == "de":
+			self.locale = "en"
+			config.mediaportal.southparklang.value = "en"
+		elif self.locale == "en":
+			self.locale = "de"
+			config.mediaportal.southparklang.value = "de"
+
+		config.mediaportal.southparklang.save()
+		configfile.save()
+		self['F2'].setText(self.locale)
+		self.loadPage()
 
 	def keyCancel(self):
 		self.close()
+
+class SouthparkPlayer(SimplePlayer):
+
+	def __init__(self, session, playList, playIdx=0, playAll=True, showPlaylist=False):
+		print "SouthparkPlayer:"
+
+		SimplePlayer.__init__(self, session, playList, playIdx=playIdx, playAll=playAll, showPlaylist=showPlaylist, ltype='southpark')
+
+		self.onLayoutFinish.append(self.getVideo)
+
+	def getVideo(self):
+		self.title = self.playList[self.playIdx][0]
+		self.link = self.playList[self.playIdx][0]
+		url = self.playList[self.playIdx][1]
+		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.gotVideo).addErrback(self.dataError)
+
+	def gotVideo(self, data):
+		rtmpe_data = re.findall('<src>(rtmpe://.*?ondemand/)(.*?.mp4)</src>', data, re.S|re.I)
+		if rtmpe_data:
+			(host, playpath) = rtmpe_data[-1]
+			final = "%s playpath=mp4:%s" % (host, playpath)
+		self.playStream(self.title, final)

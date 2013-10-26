@@ -72,6 +72,9 @@ config.mediaportal.premiumize_use = ConfigYesNo(default = False)
 config.mediaportal.premiumize_username = ConfigText(default="user!", fixed_size=False)
 config.mediaportal.premiumize_password = ConfigText(default="pass!", fixed_size=False)
 
+# Southpark Language
+config.mediaportal.southparklang = ConfigText(default="de", fixed_size=False)
+
 # Sport
 #from additions.sport.ran import *
 #config.mediaportal.showRan = ConfigYesNo(default = True)
