@@ -910,8 +910,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.funsport.append(self.hauptListEntry("Sport1.fm", "sport1fm"))
 		if config.mediaportal.bildde.value:
 			self.funsport.append(self.hauptListEntry("Bild.de", "bild"))
-		if config.mediaportal.southpark.value:
-			self.funsport.append(self.hauptListEntry("Southpark.de", "southpark"))
 		if config.mediaportal.showgrauzone.value:
 			if config.mediaportal.showMusicstreamcc.value:
 				self.funsport.append(self.hauptListEntry("Musicstream.cc", "musicstreamcc"))
@@ -994,6 +992,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.mediatheken.append(self.hauptListEntry("Welt der Wunder", "wissensthek"))
 		if config.mediaportal.n24.value:
 			self.mediatheken.append(self.hauptListEntry("N24 Mediathek", "n24"))
+		if config.mediaportal.southpark.value:
+			self.mediatheken.append(self.hauptListEntry("Southpark.de", "southpark"))
 
 		# Porn
 		if config.mediaportal.showporn.value:
@@ -1959,8 +1959,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Wissen.de", "wissen", "Fun"))
 		if config.mediaportal.bildde.value:
 			self.plugin_liste.append(("Bild.de", "bild", "Fun"))
-		if config.mediaportal.southpark.value:
-			self.plugin_liste.append(("Southpark.de", "southpark", "Fun"))
 		if astModule:
 			if config.mediaportal.showHeiseVideo.value:
 				self.plugin_liste.append(("heiseVIDEO", "heisevideo", "Fun"))
@@ -2032,6 +2030,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Welt der Wunder", "wissensthek", "Mediathek"))
 		if config.mediaportal.n24.value:
 			self.plugin_liste.append(("N24 Mediathek", "n24", "Mediathek"))
+		if config.mediaportal.southpark.value:
+			self.plugin_liste.append(("Southpark.de", "southpark", "Mediathek"))
 
 		# Porn
 		if (config.mediaportal.showporn.value == False and config.mediaportal.filter.value == 'Porn'):
