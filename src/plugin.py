@@ -187,10 +187,10 @@ from additions.fun.wissen import *
 config.mediaportal.wissen = ConfigYesNo(default = True)
 from additions.fun.bild import *
 config.mediaportal.bildde = ConfigYesNo(default = True)
-from additions.fun.southpark import *
-config.mediaportal.southpark = ConfigYesNo(default = True)
 
 # Mediatheken
+from additions.mediatheken.southpark import *
+config.mediaportal.southpark = ConfigYesNo(default = True)
 from additions.mediatheken.myvideo import *
 config.mediaportal.showMyvideo = ConfigYesNo(default = True)
 from additions.mediatheken.netzkino import *
@@ -455,7 +455,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.music.append(getConfigListEntry("Deluxemusic", config.mediaportal.showDeluxemusic))
 		self.music.append(getConfigListEntry("MTV.de Charts", config.mediaportal.showMTVdeCharts))
 		self.music.append(getConfigListEntry("MUSIC-Channels", config.mediaportal.showMusicChannels))
-		self.music.append(getConfigListEntry("Myvideo Top 100", config.mediaportal.showMyvideoTop100))
+		self.music.append(getConfigListEntry("MyVideo Top 100", config.mediaportal.showMyvideoTop100))
 		self.music.append(getConfigListEntry("Nuna", config.mediaportal.showNuna))
 		self.music.append(getConfigListEntry("putpat.tv", config.mediaportal.showputpattv))
 		if config.mediaportal.showgrauzone.value:
@@ -534,7 +534,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.mediatheken.append(getConfigListEntry("RTLNITRONOW", config.mediaportal.showRTLnitro))
 		self.mediatheken.append(getConfigListEntry("SRF Player", config.mediaportal.showSRF))
 		self.mediatheken.append(getConfigListEntry("SUPERRTLNOW", config.mediaportal.showSUPERRTLnow))
-		self.mediatheken.append(getConfigListEntry("Tivi", config.mediaportal.showtivi))
+		self.mediatheken.append(getConfigListEntry("ZDFtivi", config.mediaportal.showtivi))
 		self.mediatheken.append(getConfigListEntry("VOXNOW", config.mediaportal.showVoxnow))
 		self.mediatheken.append(getConfigListEntry("ZDF Mediathek", config.mediaportal.showZDF))
 		self.mediatheken.append(getConfigListEntry("MySpass", config.mediaportal.showmyspass))
@@ -910,8 +910,6 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.funsport.append(self.hauptListEntry("Sport1.fm", "sport1fm"))
 		if config.mediaportal.bildde.value:
 			self.funsport.append(self.hauptListEntry("Bild.de", "bild"))
-		if config.mediaportal.southpark.value:
-			self.funsport.append(self.hauptListEntry("Southpark.de", "southpark"))
 		if config.mediaportal.showgrauzone.value:
 			if config.mediaportal.showMusicstreamcc.value:
 				self.funsport.append(self.hauptListEntry("Musicstream.cc", "musicstreamcc"))
@@ -937,7 +935,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		if config.mediaportal.showNetzKino.value:
 			self.mediatheken.append(self.hauptListEntry("NetzKino", "netzkino"))
 		if config.mediaportal.showtivi.value:
-			self.mediatheken.append(self.hauptListEntry("Tivi", "tivi"))
+			self.mediatheken.append(self.hauptListEntry("ZDFtivi", "tivi"))
 		if config.mediaportal.showkika.value:
 			self.mediatheken.append(self.hauptListEntry("KIKA+", "kika"))
 		if config.mediaportal.showVoxnow.value:
@@ -994,6 +992,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.mediatheken.append(self.hauptListEntry("Welt der Wunder", "wissensthek"))
 		if config.mediaportal.n24.value:
 			self.mediatheken.append(self.hauptListEntry("N24 Mediathek", "n24"))
+		if config.mediaportal.southpark.value:
+			self.mediatheken.append(self.hauptListEntry("Southpark.de", "southpark"))
 
 		# Porn
 		if config.mediaportal.showporn.value:
@@ -1466,7 +1466,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.session.open(auditvGenreScreen)
 		elif auswahl == "gronkh.de":
 			self.session.open(gronkhGenreScreen)
-		elif auswahl == "Tivi":
+		elif auswahl == "ZDFtivi":
 			self.session.open(tiviGenreListeScreen)
 		elif auswahl == "Evonic.tv":
 			self.session.open(showevonicGenre)
@@ -1959,8 +1959,6 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Wissen.de", "wissen", "Fun"))
 		if config.mediaportal.bildde.value:
 			self.plugin_liste.append(("Bild.de", "bild", "Fun"))
-		if config.mediaportal.southpark.value:
-			self.plugin_liste.append(("Southpark.de", "southpark", "Fun"))
 		if astModule:
 			if config.mediaportal.showHeiseVideo.value:
 				self.plugin_liste.append(("heiseVIDEO", "heisevideo", "Fun"))
@@ -1971,7 +1969,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if config.mediaportal.showKinderKino.value:
 			self.plugin_liste.append(("KinderKino", "kinderkino", "Mediathek"))
 		if config.mediaportal.showtivi.value:
-			self.plugin_liste.append(("Tivi", "tivi", "Mediathek"))
+			self.plugin_liste.append(("ZDFtivi", "tivi", "Mediathek"))
 		if config.mediaportal.showkika.value:
 			self.plugin_liste.append(("KIKA+", "kika", "Mediathek"))
 		if config.mediaportal.showMyvideo.value:
@@ -2032,6 +2030,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.plugin_liste.append(("Welt der Wunder", "wissensthek", "Mediathek"))
 		if config.mediaportal.n24.value:
 			self.plugin_liste.append(("N24 Mediathek", "n24", "Mediathek"))
+		if config.mediaportal.southpark.value:
+			self.plugin_liste.append(("Southpark.de", "southpark", "Mediathek"))
 
 		# Porn
 		if (config.mediaportal.showporn.value == False and config.mediaportal.filter.value == 'Porn'):
@@ -2569,7 +2569,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.session.open(auditvGenreScreen)
 		elif auswahl == "gronkh.de":
 			self.session.open(gronkhGenreScreen)
-		elif auswahl == "Tivi":
+		elif auswahl == "ZDFtivi":
 			self.session.open(tiviGenreListeScreen)
 		elif auswahl == "Evonic.tv":
 			self.session.open(showevonicGenre)
