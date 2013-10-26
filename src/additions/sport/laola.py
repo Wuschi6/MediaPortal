@@ -328,7 +328,7 @@ class laolaSelectGenreScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getData).addErrback(self.dataError)
 
 	def getData(self, data):
-		match_player = re.search('<iframe.*?src="(.*?)"', data, re.S)
+		match_player = re.search('<iframe.*?class="main_tv_player".*?src="(.*?)"', data, re.S)
 		if match_player:
 			getPage(match_player.group(1), headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getData2).addErrback(self.dataError)
 		else:

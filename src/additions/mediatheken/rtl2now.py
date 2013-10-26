@@ -250,7 +250,7 @@ class RTL2nowFilmeListeScreen(Screen):
 				movieinfo = [final,self.streamName]
 				self.session.open(PlayRtmpMovie, movieinfo, self.streamName)
 			else:
-				final = "%s swfUrl=http://rtl2now.rtl2.de/includes/vodplayer.swf pageurl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
+				final = "%s swfUrl=http://rtl2now.rtl2.de/includes/vodplayer.swf pageUrl=%s playpath=mp4:%s swfVfy=1" % (host, self.pageurl, playpath)
 				print final
 				playlist = []
 				playlist.append((self.streamName, final))

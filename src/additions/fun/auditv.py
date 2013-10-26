@@ -192,7 +192,7 @@ class auditvFilmScreen(Screen):
 				movieinfo = [final, title]
 				self.session.open(PlayRtmpMovie, movieinfo, title)
 			else:
-				url = "%s swfUrl=http://tv.audi.de/auditv/portal.swf?version=1348653342 pageurl=http://tv.audi.de/#/01 playpath=mp4:%s swfVfy=1" % (host, playpath)
+				url = "%s swfUrl=http://tv.audi.de/auditv/portal.swf?version=1348653342 pageUrl=http://tv.audi.de/#/01 playpath=mp4:%s swfVfy=1" % (host, playpath)
 				self.keyLocked = False
 				self.play(url)
 
