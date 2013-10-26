@@ -318,6 +318,8 @@ config.mediaportal.amateurslust = ConfigYesNo(default = False)
 from additions.porn.pornoid import *
 config.mediaportal.pornoid = ConfigYesNo(default = False)
 config.mediaportal.befuck = ConfigYesNo(default = False)
+from additions.porn.dachix import *
+config.mediaportal.dachix = ConfigYesNo(default = False)
 
 # Grauzone
 from additions.grauzone.evonic import *
@@ -572,6 +574,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.porn.append(getConfigListEntry("AmateursLust.com", config.mediaportal.amateurslust))
 		self.porn.append(getConfigListEntry("Pornoid.com", config.mediaportal.pornoid))
 		self.porn.append(getConfigListEntry("BeFuck.com", config.mediaportal.befuck))
+		self.porn.append(getConfigListEntry("Dachix.com", config.mediaportal.dachix))
 		if config.mediaportal.showgrauzone.value:
 			#self.porn.append(getConfigListEntry("PlayPorn", config.mediaportal.showplayporn))
 			self.porn.append(getConfigListEntry("PORNMVZ", config.mediaportal.showpornmvz))
@@ -1080,6 +1083,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 				self.porn.append(self.hauptListEntry("Pornoid.com", "pornoid"))
 			if config.mediaportal.befuck.value:
 				self.porn.append(self.hauptListEntry("BeFuck.com", "befuck"))
+			if config.mediaportal.dachix.value:
+				self.porn.append(self.hauptListEntry("Dachix.com", "dachix"))
 
 		# Grauzone
 		if config.mediaportal.showgrauzone.value:
@@ -1712,6 +1717,8 @@ class haupt_Screen(Screen, ConfigListScreen):
 		elif auswahl == "BeFuck.com":
 			self.pornscreen = pornoidGenreScreen
 			self.cat = "befuck"
+		elif auswahl == "Dachix.com":
+			self.pornscreen = dachixGenreScreen
 
 		if self.pornscreen:
 			if config.mediaportal.pornpin.value:
@@ -2120,6 +2127,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				self.plugin_liste.append(("Pornoid.com", "pornoid", "Porn"))
 			if config.mediaportal.befuck.value:
 				self.plugin_liste.append(("BeFuck.com", "befuck", "Porn"))
+			if config.mediaportal.dachix.value:
+				self.plugin_liste.append(("Dachix.com", "dachix", "Porn"))
 
 		# Grauzone
 		if (config.mediaportal.showgrauzone.value == False and config.mediaportal.filter.value == 'Grauzone'):
@@ -2817,6 +2826,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		elif auswahl == "BeFuck.com":
 			self.pornscreen = pornoidGenreScreen
 			self.cat = "befuck"
+		elif auswahl == "Dachix.com":
+			self.pornscreen = dachixGenreScreen
 
 		if self.pornscreen:
 			if config.mediaportal.pornpin.value:
