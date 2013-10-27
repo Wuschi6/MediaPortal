@@ -1399,16 +1399,42 @@ class m4kStreamListeScreen(Screen):
 					self.loadPic()
 
 	def m4kStreamListEntry(self, entry):
-		return [entry,
-			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]),
-			(eListboxPythonMultiContent.TYPE_TEXT, 250, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]),
-			(eListboxPythonMultiContent.TYPE_TEXT, 450, 0, 430, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3])
-			]
+		if config.mediaportal.premiumize_use.value:
+			premiumFarbe = 0xCC0000
+			if re.search('(putlocker|sockshare|bitshare)', entry[2], re.S|re.I):
+				return [entry,
+					(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1], premiumFarbe),
+					(eListboxPythonMultiContent.TYPE_TEXT, 250, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2], premiumFarbe),
+					(eListboxPythonMultiContent.TYPE_TEXT, 450, 0, 430, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3], premiumFarbe)
+					]
+			else:
+				return [entry,
+					(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]),
+					(eListboxPythonMultiContent.TYPE_TEXT, 250, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]),
+					(eListboxPythonMultiContent.TYPE_TEXT, 450, 0, 430, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3])
+					]
+		else:
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]),
+				(eListboxPythonMultiContent.TYPE_TEXT, 250, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]),
+				(eListboxPythonMultiContent.TYPE_TEXT, 450, 0, 430, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3])
+				]
 
 	def m4kStream2ListEntry(self, entry):
-		return [entry,
-			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1])
-			]
+		if config.mediaportal.premiumize_use.value:
+			premiumFarbe = 0xCC0000
+			if re.search('(putlocker|sockshare|bitshare)', entry[1], re.S|re.I):
+				return [entry,
+					(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1], premiumFarbe)
+					]
+			else:
+				return [entry,
+					(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1])
+					]
+		else:
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1])
+				]
 
 	def loadPic(self):
 		print "link:", self.streamGenreLink

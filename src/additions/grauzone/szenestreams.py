@@ -13,9 +13,20 @@ def SzeneStreamsFilmListEntry(entry):
 		]
 
 def SzeneStreamsHosterListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
-		]
+	premiumFarbe = 0xCC0000
+	if config.mediaportal.premiumize_use.value:
+		if re.search('(putlocker|sockshare|bitshare)', entry[0], re.S|re.I):
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0], premiumFarbe)
+				]
+		else:
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+				]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 900, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+			]
 
 class SzeneStreamsGenreScreen(Screen):
 

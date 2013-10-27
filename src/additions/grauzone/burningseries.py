@@ -25,6 +25,22 @@ def mainListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		]
 
+def bsStreamListEntry(entry):
+	premiumFarbe = 0xCC0000
+	if config.mediaportal.premiumize_use.value:
+		if re.search('(putlocker|sockshare|bitshare)', entry[0], re.S|re.I):
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0], premiumFarbe)
+				]
+		else:
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+				]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+			]
+
 class bsMain(Screen, ConfigListScreen):
 	def __init__(self, session):
 		self.session = session
@@ -468,7 +484,7 @@ class bsStreams(Screen, ConfigListScreen):
 					bsUrl = "http://www.burning-seri.es/" + bsUrl
 					#if re.match('.*?(Ecostream|Sockshare|streamclou|Putlocker|Filenuke|MovShare|Novamov|DivxStage|UploadC|NowVideo|VideoWeed|FileNuke|BitShare|putme|limevideo|stream2k|played|putlocker|sockshare|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|BitShare|Userporn)',bsStream,re.I):
 					self.streamList.append((bsStream,bsUrl))
-				self.streamMenuList.setList(map(bsListEntry, self.streamList))
+				self.streamMenuList.setList(map(bsStreamListEntry, self.streamList))
 				self.keyLocked = False
 
 		details = re.findall('id="desc_spoiler">\s{0,10}(.*?)</div>.*?<img\ssrc="(.*?)"\salt="Cover"\s{0,2}/>', data, re.S)

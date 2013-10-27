@@ -14,11 +14,26 @@ def movie2kListEntry(entry):
 
 #(url, date, hostername, quali)
 def movie2kStreamListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 150, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]),
-		(eListboxPythonMultiContent.TYPE_TEXT, 200, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]),
-		(eListboxPythonMultiContent.TYPE_TEXT, 400, 0, 400, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3])
-		]
+	premiumFarbe = 0xCC0000
+	if config.mediaportal.premiumize_use.value:
+		if re.search('(putlocker|sockshare|bitshare)', entry[2], re.S|re.I):
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 150, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1], premiumFarbe),
+				(eListboxPythonMultiContent.TYPE_TEXT, 200, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2], premiumFarbe),
+				(eListboxPythonMultiContent.TYPE_TEXT, 400, 0, 400, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3], premiumFarbe)
+				]
+		else:
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 150, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]),
+				(eListboxPythonMultiContent.TYPE_TEXT, 200, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]),
+				(eListboxPythonMultiContent.TYPE_TEXT, 400, 0, 400, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3])
+				]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 150, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[1]),
+			(eListboxPythonMultiContent.TYPE_TEXT, 200, 0, 200, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]),
+			(eListboxPythonMultiContent.TYPE_TEXT, 400, 0, 400, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3])
+			]
 
 class movie2kGenreScreen(Screen):
 
