@@ -576,7 +576,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.porn.append(getConfigListEntry("AmateursLust", config.mediaportal.amateurslust))
 		self.porn.append(getConfigListEntry("Pornoid", config.mediaportal.pornoid))
 		self.porn.append(getConfigListEntry("BeFuck", config.mediaportal.befuck))
-		self.porn.append(getConfigListEntry("Dachix", config.mediaportal.dachix))
+		self.porn.append(getConfigListEntry("DaChix", config.mediaportal.dachix))
 		self.porn.append(getConfigListEntry("TubeWolf", config.mediaportal.tubewolf))
 		if config.mediaportal.showgrauzone.value:
 			#self.porn.append(getConfigListEntry("PlayPorn", config.mediaportal.showplayporn))
@@ -1087,7 +1087,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			if config.mediaportal.befuck.value:
 				self.porn.append(self.hauptListEntry("BeFuck", "befuck"))
 			if config.mediaportal.dachix.value:
-				self.porn.append(self.hauptListEntry("Dachix", "dachix"))
+				self.porn.append(self.hauptListEntry("DaChix", "dachix"))
 			if config.mediaportal.tubewolf.value:
 				self.porn.append(self.hauptListEntry("TubeWolf", "tubewolf"))
 
@@ -1722,7 +1722,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		elif auswahl == "BeFuck":
 			self.pornscreen = pornoidGenreScreen
 			self.cat = "befuck"
-		elif auswahl == "Dachix":
+		elif auswahl == "DaChix":
 			self.pornscreen = dachixGenreScreen
 		elif auswahl == "TubeWolf":
 			self.pornscreen = tubewolfGenreScreen
@@ -2135,7 +2135,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			if config.mediaportal.befuck.value:
 				self.plugin_liste.append(("BeFuck", "befuck", "Porn"))
 			if config.mediaportal.dachix.value:
-				self.plugin_liste.append(("Dachix", "dachix", "Porn"))
+				self.plugin_liste.append(("DaChix", "dachix", "Porn"))
 			if config.mediaportal.tubewolf.value:
 				self.plugin_liste.append(("TubeWolf", "tubewolf", "Porn"))
 
@@ -2835,7 +2835,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		elif auswahl == "BeFuck":
 			self.pornscreen = pornoidGenreScreen
 			self.cat = "befuck"
-		elif auswahl == "Dachix":
+		elif auswahl == "DaChix":
 			self.pornscreen = dachixGenreScreen
 		elif auswahl == "TubeWolf":
 			self.pornscreen = tubewolfGenreScreen
