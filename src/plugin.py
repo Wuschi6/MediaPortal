@@ -2388,7 +2388,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		if infos:
 			(a_name, a_type, a_expires, a_left) = infos[0]
 			print a_name, a_type, a_expires, a_left
-			deadline = datetime.datetime.fromtimestamp(int(a_expires)).strftime('%s-%m-%Y')
+			deadline = datetime.datetime.fromtimestamp(int(a_expires)).strftime('%d-%m-%Y')
 			pmsg = "User: %s\nType: %s\nExpires: %s\nTraffic: %s GB" % (a_name, a_type, deadline, int(float(a_left)))
 			self.session.open(MessageBox, pmsg , MessageBox.TYPE_INFO)
 		else:
