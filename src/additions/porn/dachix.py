@@ -70,10 +70,15 @@ class dachixGenreScreen(Screen):
 		if raw:
 			self.filmliste = []
 			for (Url, Title, Image) in raw:
-				Url = "http://www.dachix.com" + Url
+				Url = "http://www.dachix.com" + Url + "/videos"
 				self.filmliste.append((decodeHtml(Title), Url, Image))
 			self.filmliste.sort()
-#			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
+			self.filmliste.insert(0, ("Longest", "http://www.dachix.com/videos?sort=longest", None))
+			self.filmliste.insert(0, ("Most Popular", "http://www.dachix.com/videos?sort=popular", None))
+			self.filmliste.insert(0, ("Most Viewed", "http://www.dachix.com/videos?sort=viewed", None))
+			self.filmliste.insert(0, ("Top Rated", "http://www.dachix.com/videos?sort=rated", None))
+			self.filmliste.insert(0, ("Most Recent", "http://www.dachix.com/videos", None))
+			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(dachixEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
@@ -191,11 +196,15 @@ class dachixListScreen(Screen):
 	def loadPage(self):
 		self.keyLocked = True
 		self.filmliste = []
-		url = self.Link + "/videos?p=" +  str(self.page)
+		if re.match('.*?\?sort', self.Link, re.S):
+			url = self.Link + "&p=" + str(self.page)
+		else:
+			url = self.Link + "?p=" + str(self.page)
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		lastpage = re.findall('current"href=".*?=(.*?)"', data, re.S)
+		parse = re.search('class="main-sectionpaging">(.*?)</div>', data, re.S)
+		lastpage = re.findall('current"href=".*?=.*?(\d+)"', parse.group(1), re.S)
 		if lastpage:
 			self.lastpage = int(lastpage[-1])
 			self['page'].setText("%s / %s" % (str(self.page), str(self.lastpage)))
@@ -203,7 +212,7 @@ class dachixListScreen(Screen):
 			self.lastpage = 1
 			self['page'].setText("%s / 1" % str(self.page))
 
-		raw = re.findall('title="(.*?)".*?content="(.*?)".*?src="(.*?)".*?duration"\scontent=".*?">(.*?)-', data, re.S)
+		raw = re.findall('itemprop="video".*?title="(.*?)".*?content="(.*?)".*?src="(.*?)".*?duration"\scontent=".*?">(.*?)\s-', data, re.S)
 		if raw:
 			for (Title, Link , Image, Duration) in raw:
 				self.filmliste.append((decodeHtml(Title), Link, Image, Duration))
@@ -285,10 +294,10 @@ class dachixListScreen(Screen):
 
 	def getStreamData(self, data):
 		self.title = self['liste'].getCurrent()[0][0]
-		parse = re.findall('<video(.*?)</source>', data, re.S)
-		raw = re.findall('src="(.*?)">', parse[0], re.S)
-		if raw:
-			self.session.open(SimplePlayer, [(self.title, raw[0])], showPlaylist=False, ltype='Bild.de')
+		url = re.search('file":"(.*?)"', data, re.S)
+		url = unquote(url.group(1))
+		if url:
+			self.session.open(SimplePlayer, [(self.title, url)], showPlaylist=False, ltype='dachix')
 
 	def keyCancel(self):
 		self.close()
