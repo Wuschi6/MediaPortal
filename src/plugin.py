@@ -1081,7 +1081,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			if config.mediaportal.showyouporn.value:
 				self.porn.append(self.hauptListEntry("YouPorn", "youporn"))
 			if config.mediaportal.amateurslust.value:
-				self.porn.append(self.hauptListEntry("AmateursLust.com", "amateurslust"))
+				self.porn.append(self.hauptListEntry("AmateursLust", "amateurslust"))
 			if config.mediaportal.pornoid.value:
 				self.porn.append(self.hauptListEntry("Pornoid", "pornoid"))
 			if config.mediaportal.befuck.value:
@@ -2129,7 +2129,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			if config.mediaportal.showyouporn.value:
 				self.plugin_liste.append(("YouPorn", "youporn", "Porn"))
 			if config.mediaportal.amateurslust.value:
-				self.plugin_liste.append(("AmateursLust.com", "amateurslust", "Porn"))
+				self.plugin_liste.append(("AmateursLust", "amateurslust", "Porn"))
 			if config.mediaportal.pornoid.value:
 				self.plugin_liste.append(("Pornoid", "pornoid", "Porn"))
 			if config.mediaportal.befuck.value:
