@@ -3,17 +3,17 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.simpleplayer import SimplePlayer
 from Plugins.Extensions.MediaPortal.resources.coverhelper import CoverHelper
 
-def dachixEntry(entry):
+def tubewolfEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
 		]
 
-def dachixEntry1(entry):
+def tubewolfEntry1(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		]
 
-class dachixGenreScreen(Screen):
+class tubewolfGenreScreen(Screen):
 
 	def __init__(self, session):
 		self.session = session
@@ -39,7 +39,7 @@ class dachixGenreScreen(Screen):
 			"left" : self.keyLeft
 		}, -1)
 
-		self['title'] = Label("Dachix.com")
+		self['title'] = Label("Tubewolf.com")
 		self['ContentTitle'] = Label("Genre:")
 		self['name'] = Label("")
 		self['F1'] = Label("Exit")
@@ -62,24 +62,22 @@ class dachixGenreScreen(Screen):
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
-		url = "http://www.dachix.com/categories"
+		url = "http://www.tubewolf.com/categories/"
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		raw = re.findall('class="listing-categories">.*?<a href="(.*?)".*?class="title">(.*?)</b>.*?src="(.*?)"', data, re.S)
-		if raw:
+		parse = re.search('class="categories"(.*?)class="link-view-all"', data, re.S)
+		cat = re.findall('<li><a\shref="(.*?)".*?<strong>(.*?)<span>\((.*?)\)</span>', parse.group(1), re.S)
+		if cat:
 			self.filmliste = []
-			for (Url, Title, Image) in raw:
-				Url = "http://www.dachix.com" + Url + "/videos"
-				self.filmliste.append((decodeHtml(Title), Url, Image))
+			for (Url, Title, Count) in cat:
+				self.filmliste.append((decodeHtml(Title), Url, Count))
 			self.filmliste.sort()
-			self.filmliste.insert(0, ("Longest", "http://www.dachix.com/videos?sort=longest", None))
-			self.filmliste.insert(0, ("Most Popular", "http://www.dachix.com/videos?sort=popular", None))
-			self.filmliste.insert(0, ("Most Viewed", "http://www.dachix.com/videos?sort=viewed", None))
-			self.filmliste.insert(0, ("Top Rated", "http://www.dachix.com/videos?sort=rated", None))
-			self.filmliste.insert(0, ("Most Recent", "http://www.dachix.com/videos", None))
+			self.filmliste.insert(0, ("Top Rated", "http://www.tubewolf.com/top-rated", 78400))
+			self.filmliste.insert(0, ("Most Popular", "http://www.tubewolf.com/most-popular", 78400))
+			self.filmliste.insert(0, ("Newest", "http://www.tubewolf.com/latest-updates", 78400))
 			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
-			self.chooseMenuList.setList(map(dachixEntry, self.filmliste))
+			self.chooseMenuList.setList(map(tubewolfEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
 
@@ -88,19 +86,18 @@ class dachixGenreScreen(Screen):
 
 	def showInfos(self):
 		Title = self['genreList'].getCurrent()[0][0]
-		ImageUrl = self['genreList'].getCurrent()[0][2]
 		self['name'].setText(Title)
-		CoverHelper(self['coverArt']).getCover(ImageUrl)
 
 	def suchen(self):
 		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
 
 	def SuchenCallback(self, callback = None, entry = None):
 		if callback is not None and len(callback):
-			self.suchString = callback.replace(' ', '-')
-			Link = 'http://www.dachix.com/s/%s' % (self.suchString)
+			self.suchString = callback.replace(' ', '+')
+			Link = '?q=%s' % (self.suchString)
 			Name = self['genreList'].getCurrent()[0][0]
-			self.session.open(dachixListScreen, Link, Name)
+			count = None
+			self.session.open(tubewolfListScreen, Link, Name, count)
 
 	def keyLeft(self):
 		if self.keyLocked:
@@ -134,17 +131,19 @@ class dachixGenreScreen(Screen):
 			self.suchen()
 		else:
 			Link = self['genreList'].getCurrent()[0][1]
-			self.session.open(dachixListScreen, Link, Name)
+			count = self['genreList'].getCurrent()[0][2]
+			self.session.open(tubewolfListScreen, Link, Name, count)
 
 	def keyCancel(self):
 		self.close()
 
-class dachixListScreen(Screen):
+class tubewolfListScreen(Screen):
 
-	def __init__(self, session, Link, Name):
+	def __init__(self, session, Link, Name, Count):
 		self.session = session
 		self.Link = Link
 		self.Name = Name
+		self.Count = Count
 		self.plugin_path = mp_globals.pluginPath
 		self.skin_path =  mp_globals.pluginPath + "/skins"
 
@@ -170,7 +169,7 @@ class dachixListScreen(Screen):
 		"green" : self.keyPageNumber
 		}, -1)
 
-		self['title'] = Label("Dachix.com")
+		self['title'] = Label("Tubewolf.com")
 		self['ContentTitle'] = Label("Genre: %s" % self.Name)
 		self['name'] = Label("")
 		self['F1'] = Label("Exit")
@@ -196,27 +195,25 @@ class dachixListScreen(Screen):
 	def loadPage(self):
 		self.keyLocked = True
 		self.filmliste = []
-		if re.match('.*?\?sort', self.Link, re.S):
-			url = self.Link + "&p=" + str(self.page)
+		if self.Name == "--- Search ---":
+			url = "http://www.tubewolf.com/search/%s/%s" % (self.page, self.Link)
 		else:
-			url = self.Link + "?p=" + str(self.page)
+			url = self.Link + "/" + str(self.page) + "/"
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		parse = re.search('class="main-sectionpaging">(.*?)</div>', data, re.S)
-		lastpage = re.findall('current"href=".*?=.*?(\d+)"', parse.group(1), re.S)
-		if lastpage:
-			self.lastpage = int(lastpage[-1])
-			self['page'].setText("%s / %s" % (str(self.page), str(self.lastpage)))
+		if self.Count:
+			self.lastpage = int(round((float(self.Count) / 109) + 0.5))
+			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
 		else:
-			self.lastpage = 1
-			self['page'].setText("%s / 1" % str(self.page))
+			self.lastpage = 999
+			self['page'].setText(str(self.page))
 
-		raw = re.findall('itemprop="video".*?title="(.*?)".*?content="(.*?)".*?src="(.*?)".*?duration"\scontent=".*?">(.*?)\s-', data, re.S)
+		raw = re.findall('class=".*?thumb">.*?<a\shref="(http://www.tubewolf.com/movies.*?)".*?title="(.*?)"><img.*?src="(.*?)".*?class="time">\s{0,2}(.*?)</span>.*?user-views"><em>(.*?)\sviews</em>\s{0,1}(.*?)</span>', data, re.S)
 		if raw:
-			for (Title, Link , Image, Duration) in raw:
-				self.filmliste.append((decodeHtml(Title), Link, Image, Duration))
-			self.chooseMenuList.setList(map(dachixEntry1, self.filmliste))
+			for (Link, Title, Image, Duration, Views, Added) in raw:
+				self.filmliste.append((decodeHtml(Title), Link, Image, Duration, Views, Added))
+			self.chooseMenuList.setList(map(tubewolfEntry1, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
 		self.keyLocked = False
 		self.showInfos()
@@ -226,7 +223,9 @@ class dachixListScreen(Screen):
 
 	def showInfos(self):
 		runtime = self['liste'].getCurrent()[0][3]
-		self['handlung'].setText("\n\nRuntime: %s" % runtime)
+		views = self['liste'].getCurrent()[0][4]
+		added = self['liste'].getCurrent()[0][5]
+		self['handlung'].setText("\n\nRuntime: %s\nViews: %s\nAdded: %s" % (runtime, views, added))
 		coverUrl = self['liste'].getCurrent()[0][2]
 		CoverHelper(self['coverArt']).getCover(coverUrl)
 
@@ -258,7 +257,7 @@ class dachixListScreen(Screen):
 		print "PageUP"
 		if self.keyLocked:
 			return
-		if self.page < self.lastpage:
+		if self.page:
 			self.page += 1
 			self.loadPage()
 
@@ -289,15 +288,14 @@ class dachixListScreen(Screen):
 	def keyOK(self):
 		if self.keyLocked:
 			return
-		Link = "http://" + self['liste'].getCurrent()[0][1]
+		Link = self['liste'].getCurrent()[0][1]
 		getPage(Link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getStreamData).addErrback(self.dataError)
 
 	def getStreamData(self, data):
 		self.title = self['liste'].getCurrent()[0][0]
-		url = re.search('file":"(.*?)"', data, re.S)
-		url = unquote(url.group(1))
-		if url:
-			self.session.open(SimplePlayer, [(self.title, url)], showPlaylist=False, ltype='dachix')
+		raw = re.findall("video_url:\s'(.*?)',", data, re.S)
+		if raw:
+			self.session.open(SimplePlayer, [(self.title, raw[0])], showPlaylist=False, ltype='tubewolf')
 
 	def keyCancel(self):
 		self.close()
