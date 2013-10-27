@@ -61,13 +61,9 @@
    <convert type="ServiceInfo">IsMultichannel</convert>
     <convert type="ConditionalShowHide" />
  </widget>
-<!--Premiumize.me--> 
-<!-- <ePixmap pixmap="~/simpleplayer/premiumizeme_off.png" position="1175,655" size="36,20" zPosition="1" alphatest="blend" />
-  <widget source="premiumizeme" render="Pixmap" pixmap="~/simpleplayer/premiumizeme_on.png" position="1175,655" size="36,20" zPosition="2" alphatest="blend">
-    <convert type="premiumizeme">premiumizemeON</convert>
-    <convert type="ConditionalShowHide" />
-  </widget>
---> 
+ <!--Premiumize.me--> 
+  <widget name="premiumizemeoff" pixmap="~/simpleplayer/premiumizeme_off.png" position="1175,655" size="36,20" zPosition="2" alphatest="blend" />
+  <widget name="premiumizemeon" pixmap="~/simpleplayer/premiumizeme_on.png" position="1175,655" size="36,20" zPosition="2" alphatest="blend" />
   <!-- Film Endzeit -->
   <ePixmap pixmap="~/simpleplayer/clockend.png" position="1110,576" size="24,24" zPosition="1" alphatest="blend" />
   <widget source="session.CurrentService" render="Label" position="1131,575" size="70,24" font="mediaportal;24" halign="right" backgroundColor="#00000000" transparent="1">

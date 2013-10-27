@@ -307,6 +307,9 @@ class SimplePlayer(Screen, SimpleSeekHelper, InfoBarMenu, InfoBarBase, InfoBarSe
 		self['spcoverfg'] = Pixmap()
 		self['Icon'] = Pixmap()
 		self._Icon = CoverHelper(self['Icon'])
+		self['premiumizemeoff'] = Pixmap()
+		self['premiumizemeon'] = Pixmap()
+		self['premiumizemeon'].hide()
 
 		# load default cover
 		self['Cover'] = Pixmap()
@@ -398,6 +401,10 @@ class SimplePlayer(Screen, SimpleSeekHelper, InfoBarMenu, InfoBarBase, InfoBarSe
 		print "playStream: ",title,url
 		if not url:
 			return
+			
+		if re.match('.*?unrestrict.me/dl/', url):
+			self['premiumizemeoff'].hide()
+			self['premiumizemeon'].show()
 
 		if self.cover or self.cover2:
 			self.showCover(imgurl)
