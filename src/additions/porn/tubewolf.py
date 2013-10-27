@@ -66,16 +66,17 @@ class tubewolfGenreScreen(Screen):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		raw = re.findall('<li><a\shref="(.*?)"\stitle=".*?"\s><span>(.*?)<em>(.*?)</em>', data, re.S)
-		if raw:
+		parse = re.search('class="categories"(.*?)class="link-view-all"', data, re.S)
+		cat = re.findall('<li><a\shref="(.*?)".*?<strong>(.*?)<span>\((.*?)\)</span>', parse.group(1), re.S)
+		if cat:
 			self.filmliste = []
-			for (Url, Title, Vids) in raw:
-				self.filmliste.append((decodeHtml(Title), Url, Vids))
+			for (Url, Title, Count) in cat:
+				self.filmliste.append((decodeHtml(Title), Url, Count))
 			self.filmliste.sort()
-			self.filmliste.insert(0, ("New Videos", "http://www.tubewolf.com/latest-updates", None))
-			self.filmliste.insert(0, ("Top Videos", "http://www.tubewolf.com/top-rated", None))
-			self.filmliste.insert(0, ("Most Viewed", "http://www.tubewolf.com/most-popular", None))
-#			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
+			self.filmliste.insert(0, ("Top Rated", "http://www.tubewolf.com/top-rated", 78400))
+			self.filmliste.insert(0, ("Most Popular", "http://www.tubewolf.com/most-popular", 78400))
+			self.filmliste.insert(0, ("Newest", "http://www.tubewolf.com/latest-updates", 78400))
+			self.filmliste.insert(0, ("--- Search ---", "callSuchen", None))
 			self.chooseMenuList.setList(map(tubewolfEntry, self.filmliste))
 			self.keyLocked = False
 			self.showInfos()
@@ -88,14 +89,15 @@ class tubewolfGenreScreen(Screen):
 		self['name'].setText(Title)
 
 	def suchen(self):
-		self.session.openWithCallback(self.searchCallback, VirtualKeyBoard, title = (_("Suchbegriff eingeben")), text = "")
+		self.session.openWithCallback(self.SuchenCallback, VirtualKeyBoard, title = (_("Suchkriterium eingeben")), text = self.suchString)
 
-	def searchCallback(self, callbackStr):
-		if callbackStr is not None:
-			print callbackStr
+	def SuchenCallback(self, callback = None, entry = None):
+		if callback is not None and len(callback):
+			self.suchString = callback.replace(' ', '+')
+			Link = '?q=%s' % (self.suchString)
 			Name = self['genreList'].getCurrent()[0][0]
-			Link = 'http://www.tubewolf.com/search/?q=%s'  % callbackStr.replace(' ','%20')
-			self.session.open(tubewolfListScreen, Link, Name)
+			count = None
+			self.session.open(tubewolfListScreen, Link, Name, count)
 
 	def keyLeft(self):
 		if self.keyLocked:
@@ -129,17 +131,19 @@ class tubewolfGenreScreen(Screen):
 			self.suchen()
 		else:
 			Link = self['genreList'].getCurrent()[0][1]
-			self.session.open(tubewolfListScreen, Link, Name)
+			count = self['genreList'].getCurrent()[0][2]
+			self.session.open(tubewolfListScreen, Link, Name, count)
 
 	def keyCancel(self):
 		self.close()
 
 class tubewolfListScreen(Screen):
 
-	def __init__(self, session, Link, Name):
+	def __init__(self, session, Link, Name, Count):
 		self.session = session
 		self.Link = Link
 		self.Name = Name
+		self.Count = Count
 		self.plugin_path = mp_globals.pluginPath
 		self.skin_path =  mp_globals.pluginPath + "/skins"
 
@@ -161,8 +165,8 @@ class tubewolfListScreen(Screen):
 		"right" : self.keyRight,
 		"left" : self.keyLeft,
 		"nextBouquet" : self.keyPageUp,
-		"prevBouquet" : self.keyPageDown
-#		"green" : self.keyPageNumber
+		"prevBouquet" : self.keyPageDown,
+		"green" : self.keyPageNumber
 		}, -1)
 
 		self['title'] = Label("Tubewolf.com")
@@ -185,18 +189,29 @@ class tubewolfListScreen(Screen):
 		self.chooseMenuList.l.setItemHeight(25)
 		self['liste'] = self.chooseMenuList
 		self.page = 1
+		self.lastpage = 1
 		self.onLayoutFinish.append(self.loadPage)
 
 	def loadPage(self):
 		self.keyLocked = True
 		self.filmliste = []
-		url = self.Link + "/" + str(self.page) + "/"
+		if self.Name == "--- Search ---":
+			url = "http://www.tubewolf.com/search/%s/%s" % (self.page, self.Link)
+		else:
+			url = self.Link + "/" + str(self.page) + "/"
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.parseData).addErrback(self.dataError)
 
 	def parseData(self, data):
-		raw = re.findall('class=.*?thumb">.*?src="(.*?)"\salt="(.*?)".*?class="time">(.*?)<.*?href="(.*?)".*?class="user-views"><em>(.*?)</em>(.*?)</span>', data, re.S)
+		if self.Count:
+			self.lastpage = int(round((float(self.Count) / 109) + 0.5))
+			self['page'].setText(str(self.page) + ' / ' + str(self.lastpage))
+		else:
+			self.lastpage = 999
+			self['page'].setText(str(self.page))
+
+		raw = re.findall('class=".*?thumb">.*?<a\shref="(http://www.tubewolf.com/movies.*?)".*?title="(.*?)"><img.*?src="(.*?)".*?class="time">\s{0,2}(.*?)</span>.*?user-views"><em>(.*?)\sviews</em>\s{0,1}(.*?)</span>', data, re.S)
 		if raw:
-			for (Image, Title, Duration, Link, Views, Added) in raw:
+			for (Link, Title, Image, Duration, Views, Added) in raw:
 				self.filmliste.append((decodeHtml(Title), Link, Image, Duration, Views, Added))
 			self.chooseMenuList.setList(map(tubewolfEntry1, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
@@ -213,23 +228,22 @@ class tubewolfListScreen(Screen):
 		self['handlung'].setText("\n\nRuntime: %s\nViews: %s\nAdded: %s" % (runtime, views, added))
 		coverUrl = self['liste'].getCurrent()[0][2]
 		CoverHelper(self['coverArt']).getCover(coverUrl)
-		self['page'].setText(str(self.page))
 
-#	def keyPageNumber(self):
-#		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
+	def keyPageNumber(self):
+		self.session.openWithCallback(self.callbackkeyPageNumber, VirtualKeyBoard, title = (_("Seitennummer eingeben")), text = str(self.page))
 
-#	def callbackkeyPageNumber(self, answer):
-#		if answer is not None:
-#			answer = re.findall('\d+', answer)
-#		else:
-#			return
-#		if answer:
-#			if int(answer[0]) < self.lastpage + 1:
-#				self.page = int(answer[0])
-#				self.loadPage()
-#			else:
-#				self.page = self.lastpage
-#				self.loadPage()
+	def callbackkeyPageNumber(self, answer):
+		if answer is not None:
+			answer = re.findall('\d+', answer)
+		else:
+			return
+		if answer:
+			if int(answer[0]) < self.lastpage + 1:
+				self.page = int(answer[0])
+				self.loadPage()
+			else:
+				self.page = self.lastpage
+				self.loadPage()
 
 	def keyPageDown(self):
 		print "PageDown"

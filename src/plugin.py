@@ -573,11 +573,11 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.porn.append(getConfigListEntry("WetPlace", config.mediaportal.showwetplace))
 		self.porn.append(getConfigListEntry("xHamster", config.mediaportal.showXhamster))
 		self.porn.append(getConfigListEntry("YouPorn", config.mediaportal.showyouporn))
-		self.porn.append(getConfigListEntry("AmateursLust.com", config.mediaportal.amateurslust))
-		self.porn.append(getConfigListEntry("Pornoid.com", config.mediaportal.pornoid))
-		self.porn.append(getConfigListEntry("BeFuck.com", config.mediaportal.befuck))
-		self.porn.append(getConfigListEntry("Dachix.com", config.mediaportal.dachix))
-		self.porn.append(getConfigListEntry("Tubewolf.com", config.mediaportal.tubewolf))
+		self.porn.append(getConfigListEntry("AmateursLust", config.mediaportal.amateurslust))
+		self.porn.append(getConfigListEntry("Pornoid", config.mediaportal.pornoid))
+		self.porn.append(getConfigListEntry("BeFuck", config.mediaportal.befuck))
+		self.porn.append(getConfigListEntry("Dachix", config.mediaportal.dachix))
+		self.porn.append(getConfigListEntry("TubeWolf", config.mediaportal.tubewolf))
 		if config.mediaportal.showgrauzone.value:
 			#self.porn.append(getConfigListEntry("PlayPorn", config.mediaportal.showplayporn))
 			self.porn.append(getConfigListEntry("PORNMVZ", config.mediaportal.showpornmvz))
@@ -1083,13 +1083,13 @@ class haupt_Screen(Screen, ConfigListScreen):
 			if config.mediaportal.amateurslust.value:
 				self.porn.append(self.hauptListEntry("AmateursLust.com", "amateurslust"))
 			if config.mediaportal.pornoid.value:
-				self.porn.append(self.hauptListEntry("Pornoid.com", "pornoid"))
+				self.porn.append(self.hauptListEntry("Pornoid", "pornoid"))
 			if config.mediaportal.befuck.value:
-				self.porn.append(self.hauptListEntry("BeFuck.com", "befuck"))
+				self.porn.append(self.hauptListEntry("BeFuck", "befuck"))
 			if config.mediaportal.dachix.value:
-				self.porn.append(self.hauptListEntry("Dachix.com", "dachix"))
+				self.porn.append(self.hauptListEntry("Dachix", "dachix"))
 			if config.mediaportal.tubewolf.value:
-				self.porn.append(self.hauptListEntry("Tubewolf.com", "tubewolf"))
+				self.porn.append(self.hauptListEntry("TubeWolf", "tubewolf"))
 
 		# Grauzone
 		if config.mediaportal.showgrauzone.value:
@@ -1714,17 +1714,17 @@ class haupt_Screen(Screen, ConfigListScreen):
 			self.pornscreen = xxxsaveFilmScreen
 		elif auswahl == "YouPorn":
 			self.pornscreen = youpornGenreScreen
-		elif auswahl == "AmateursLust.com":
+		elif auswahl == "AmateursLust":
 			self.pornscreen = amateurslustGenreScreen
-		elif auswahl == "Pornoid.com":
+		elif auswahl == "Pornoid":
 			self.pornscreen = pornoidGenreScreen
 			self.cat = "pornoid"
-		elif auswahl == "BeFuck.com":
+		elif auswahl == "BeFuck":
 			self.pornscreen = pornoidGenreScreen
 			self.cat = "befuck"
-		elif auswahl == "Dachix.com":
+		elif auswahl == "Dachix":
 			self.pornscreen = dachixGenreScreen
-		elif auswahl == "Tubewolf.com":
+		elif auswahl == "TubeWolf":
 			self.pornscreen = tubewolfGenreScreen
 
 		if self.pornscreen:
@@ -2131,13 +2131,13 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			if config.mediaportal.amateurslust.value:
 				self.plugin_liste.append(("AmateursLust.com", "amateurslust", "Porn"))
 			if config.mediaportal.pornoid.value:
-				self.plugin_liste.append(("Pornoid.com", "pornoid", "Porn"))
+				self.plugin_liste.append(("Pornoid", "pornoid", "Porn"))
 			if config.mediaportal.befuck.value:
-				self.plugin_liste.append(("BeFuck.com", "befuck", "Porn"))
+				self.plugin_liste.append(("BeFuck", "befuck", "Porn"))
 			if config.mediaportal.dachix.value:
-				self.plugin_liste.append(("Dachix.com", "dachix", "Porn"))
+				self.plugin_liste.append(("Dachix", "dachix", "Porn"))
 			if config.mediaportal.tubewolf.value:
-				self.plugin_liste.append(("Tubewolf.com", "tubewolf", "Porn"))
+				self.plugin_liste.append(("TubeWolf", "tubewolf", "Porn"))
 
 		# Grauzone
 		if (config.mediaportal.showgrauzone.value == False and config.mediaportal.filter.value == 'Grauzone'):
@@ -2827,17 +2827,17 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			self.pornscreen = xxxsaveFilmScreen
 		elif auswahl == "YouPorn":
 			self.pornscreen = youpornGenreScreen
-		elif auswahl == "AmateursLust.com":
+		elif auswahl == "AmateursLust":
 			self.pornscreen = amateurslustGenreScreen
-		elif auswahl == "Pornoid.com":
+		elif auswahl == "Pornoid":
 			self.pornscreen = pornoidGenreScreen
 			self.cat = "pornoid"
-		elif auswahl == "BeFuck.com":
+		elif auswahl == "BeFuck":
 			self.pornscreen = pornoidGenreScreen
 			self.cat = "befuck"
-		elif auswahl == "Dachix.com":
+		elif auswahl == "Dachix":
 			self.pornscreen = dachixGenreScreen
-		elif auswahl == "Tubewolf.com":
+		elif auswahl == "TubeWolf":
 			self.pornscreen = tubewolfGenreScreen
 
 		if self.pornscreen:
