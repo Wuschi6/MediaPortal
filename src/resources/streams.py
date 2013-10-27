@@ -25,8 +25,16 @@ class get_stream_link:
 		useProxy = config.mediaportal.premiumize_use.value
 		self.puser = config.mediaportal.premiumize_username.value
 		self.ppass = config.mediaportal.premiumize_password.value
+		self.papiurl = "https://api.premiumize.me/pm-api/v1.php?method=directdownloadlink&params[login]=%s&params[pass]=%s&params[link]=" % (self.puser, self.ppass)
 
 		self.tw_agent_hlp = TwAgentHelper(use_proxy=useProxy, p_user=self.puser, p_pass=self.ppass)
+
+	def papiCallback(self, data):
+		stream_url = re.findall('"location":"(.*?)"', data, re.S|re.I)
+		if stream_url:
+			self._callback(stream_url[0]. replace('\\',''))
+		else:
+			self.stream_not_found()
 
 	def check_link(self, data, got_link, showmsgbox=True):
 		print "check_link"
@@ -51,8 +59,8 @@ class get_stream_link:
 					else:
 						self.stream_not_found()
 					"""
-					self.tw_agent_hlp.getWebPage(self.streamProxyPutlockerSockshare, self.errorload, link, False)
-
+					#self.tw_agent_hlp.getWebPage(self.streamProxyPutlockerSockshare, self.errorload, link, False)
+					getPage(self.papiurl+link).addCallback(self.papiCallback).addErrback(self.errorload)
 				else:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.streamPutlockerSockshare, link, "putlocker").addErrback(self.errorload)
 
@@ -74,8 +82,8 @@ class get_stream_link:
 					else:
 						self.stream_not_found()
 					"""
-					self.tw_agent_hlp.getWebPage(self.streamProxyPutlockerSockshare, self.errorload, link, False)
-					
+					#self.tw_agent_hlp.getWebPage(self.streamProxyPutlockerSockshare, self.errorload, link, False)
+					getPage(self.papiurl+link).addCallback(self.papiCallback).addErrback(self.errorload)
 				else:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.streamPutlockerSockshare, link, "sockshare").addErrback(self.errorload)
 
@@ -236,7 +244,8 @@ class get_stream_link:
 					else:
 						self.stream_not_found()
 					"""
-					self.tw_agent_hlp.getWebPage(self.streamProxyPutlockerSockshare, self.errorload, link, False)
+					#self.tw_agent_hlp.getWebPage(self.streamProxyPutlockerSockshare, self.errorload, link, False)
+					getPage(self.papiurl+link).addCallback(self.papiCallback).addErrback(self.errorload)
 				else:
 					getPage(link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.bitshare).addErrback(self.errorload)
 
