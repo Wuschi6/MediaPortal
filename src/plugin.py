@@ -576,7 +576,7 @@ class hauptScreenSetup(Screen, ConfigListScreen):
 		self.porn.append(getConfigListEntry("AmateursLust", config.mediaportal.amateurslust))
 		self.porn.append(getConfigListEntry("Pornoid", config.mediaportal.pornoid))
 		self.porn.append(getConfigListEntry("BeFuck", config.mediaportal.befuck))
-		self.porn.append(getConfigListEntry("Dachix", config.mediaportal.dachix))
+		self.porn.append(getConfigListEntry("DaChix", config.mediaportal.dachix))
 		self.porn.append(getConfigListEntry("TubeWolf", config.mediaportal.tubewolf))
 		if config.mediaportal.showgrauzone.value:
 			#self.porn.append(getConfigListEntry("PlayPorn", config.mediaportal.showplayporn))
@@ -1087,7 +1087,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 			if config.mediaportal.befuck.value:
 				self.porn.append(self.hauptListEntry("BeFuck", "befuck"))
 			if config.mediaportal.dachix.value:
-				self.porn.append(self.hauptListEntry("Dachix", "dachix"))
+				self.porn.append(self.hauptListEntry("DaChix", "dachix"))
 			if config.mediaportal.tubewolf.value:
 				self.porn.append(self.hauptListEntry("TubeWolf", "tubewolf"))
 
@@ -1722,7 +1722,7 @@ class haupt_Screen(Screen, ConfigListScreen):
 		elif auswahl == "BeFuck":
 			self.pornscreen = pornoidGenreScreen
 			self.cat = "befuck"
-		elif auswahl == "Dachix":
+		elif auswahl == "DaChix":
 			self.pornscreen = dachixGenreScreen
 		elif auswahl == "TubeWolf":
 			self.pornscreen = tubewolfGenreScreen
@@ -2135,7 +2135,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			if config.mediaportal.befuck.value:
 				self.plugin_liste.append(("BeFuck", "befuck", "Porn"))
 			if config.mediaportal.dachix.value:
-				self.plugin_liste.append(("Dachix", "dachix", "Porn"))
+				self.plugin_liste.append(("DaChix", "dachix", "Porn"))
 			if config.mediaportal.tubewolf.value:
 				self.plugin_liste.append(("TubeWolf", "tubewolf", "Porn"))
 
@@ -2346,7 +2346,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			"displayHelp" : self.keyHelp,
 			"blue" : self.changeFilter,
 			"green" : self.chSort,
-			"yellow": self.manuelleSortierung
+			"yellow": self.manuelleSortierung,
+			"red": self.premiumize
 		}, -1)
 
 		self['name'] = Label("Plugin Auswahl")
@@ -2372,6 +2373,29 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 
 		self.onFirstExecBegin.append(self._onFirstExecBegin)
 		self.onFirstExecBegin.append(self.checkPathes)
+
+	def premiumize(self):
+		if config.mediaportal.premiumize_use.value:
+			self.puser = config.mediaportal.premiumize_username.value
+			self.ppass = config.mediaportal.premiumize_password.value
+			url = "https://api.premiumize.me/pm-api/v1.php?method=accountstatus&params[login]=%s&params[pass]=%s" % (self.puser, self.ppass)
+			getPage(url, method="GET", timeout=15).addCallback(self.premiumizeData).addErrback(self.dataError)
+		else:
+			self.session.open(MessageBox, "Premiumize.me ist nicht aktivivert.", MessageBox.TYPE_ERROR)
+	
+	def premiumizeData(self, data):
+		infos = re.findall('"account_name":"(.*?)","type":"(.*?)","expires":(.*?),".*?trafficleft_gigabytes":(.*?)}', data, re.S|re.I)
+		if infos:
+			(a_name, a_type, a_expires, a_left) = infos[0]
+			print a_name, a_type, a_expires, a_left
+			deadline = datetime.datetime.fromtimestamp(int(a_expires)).strftime('%d-%m-%Y')
+			pmsg = "User: %s\nType: %s\nExpires: %s\nTraffic: %s GB" % (a_name, a_type, deadline, int(float(a_left)))
+			self.session.open(MessageBox, pmsg , MessageBox.TYPE_INFO)
+		else:
+			self.session.open(MessageBox, "Premiumize.me login failed.", MessageBox.TYPE_ERROR)
+
+	def dataError(self, error):
+		print error
 
 	def checkPathes(self):
 		CheckPathes(self.session).checkPathes(self.cb_checkPathes)
@@ -2835,7 +2859,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 		elif auswahl == "BeFuck":
 			self.pornscreen = pornoidGenreScreen
 			self.cat = "befuck"
-		elif auswahl == "Dachix":
+		elif auswahl == "DaChix":
 			self.pornscreen = dachixGenreScreen
 		elif auswahl == "TubeWolf":
 			self.pornscreen = tubewolfGenreScreen
