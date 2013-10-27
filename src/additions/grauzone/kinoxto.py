@@ -22,12 +22,30 @@ def kxListEntry2(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 830, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		]
 def kxStreamListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 230, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]),
-		(eListboxPythonMultiContent.TYPE_TEXT, 270, 0, 120, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]),
-		(eListboxPythonMultiContent.TYPE_TEXT, 390, 0, 130, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3]),
-		(eListboxPythonMultiContent.TYPE_TEXT, 520, 0, 150, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[4])
-		]
+	if config.mediaportal.premiumize_use.value:
+		premiumFarbe = 0xCC0000
+		if re.search('(putlocker|sockshare|bitshare)', entry[0], re.S|re.I):
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 230, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0], premiumFarbe),
+				(eListboxPythonMultiContent.TYPE_TEXT, 270, 0, 120, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2], premiumFarbe),
+				(eListboxPythonMultiContent.TYPE_TEXT, 390, 0, 130, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3], premiumFarbe),
+				(eListboxPythonMultiContent.TYPE_TEXT, 520, 0, 150, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[4], premiumFarbe)
+				]
+		else:
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 230, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]),
+				(eListboxPythonMultiContent.TYPE_TEXT, 270, 0, 120, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]),
+				(eListboxPythonMultiContent.TYPE_TEXT, 390, 0, 130, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3]),
+				(eListboxPythonMultiContent.TYPE_TEXT, 520, 0, 150, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[4])
+				]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 230, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0]),
+			(eListboxPythonMultiContent.TYPE_TEXT, 270, 0, 120, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[2]),
+			(eListboxPythonMultiContent.TYPE_TEXT, 390, 0, 130, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[3]),
+			(eListboxPythonMultiContent.TYPE_TEXT, 520, 0, 150, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[4])
+			]
+
 def kxMainListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])

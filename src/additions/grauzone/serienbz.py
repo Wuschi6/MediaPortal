@@ -13,6 +13,22 @@ def SerienListEntry(entry):
 		(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
 		]
 
+def SerienStreamListEntry(entry):
+	if config.mediaportal.premiumize_use.value:
+		premiumFarbe = 0xCC0000
+		if re.search('(putlocker|sockshare|bitshare)', entry[0], re.S|re.I):
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0], premiumFarbe)
+				]
+		else:
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+				]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 20, 0, 860, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+			]
+
 def sbzWatchListEntry(entry):
 	return [entry,
 		(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 800, 25, 0, RT_HALIGN_LEFT | RT_VALIGN_CENTER, entry[0])
@@ -442,7 +458,7 @@ class SerienStreamListingScreen(Screen):
 		CoverHelper(self['coverArt']).getCover(self.serienPic)
 		for hoster,hostrname in self.serienLink:
 			self.filmliste.append((hostrname, hoster))
-		self.chooseMenuList.setList(map(SerienListEntry, self.filmliste))
+		self.chooseMenuList.setList(map(SerienStreamListEntry, self.filmliste))
 		self.keyLocked = False
 
 	def dataError(self, error):

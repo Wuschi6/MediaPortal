@@ -8,9 +8,20 @@ def vibeoListEntry(entry):
 		]
 
 def vibeoStreamsListEntry(entry):
-	return [entry,
-		(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 850, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
-		]
+	premiumFarbe = 0xCC0000
+	if config.mediaportal.premiumize_use.value:
+		if re.search('(putlocker|sockshare|bitshare)', entry[0], re.S|re.I):
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 850, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0], premiumFarbe)
+				]
+		else:
+			return [entry,
+				(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 850, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+				]
+	else:
+		return [entry,
+			(eListboxPythonMultiContent.TYPE_TEXT, 0, 0, 850, 25, 0, RT_HALIGN_CENTER | RT_VALIGN_CENTER, entry[0])
+			]
 
 class vibeoFilmListeScreen(Screen):
 
@@ -421,7 +432,7 @@ class vibeoStreamListeScreen(Screen):
 				print sname, surl.replace('\\','')
 				if re.match('.*?(putlocker|sockshare|streamclou|xvidstage|filenuke|movreel|nowvideo|xvidstream|uploadc|vreer|MonsterUploads|Novamov|Videoweed|Divxstage|Ginbig|Flashstrea|Movshare|yesload|faststream|Vidstream|PrimeShare|flashx|Divxmov|Putme|BitShare|Userporn)', sname, re.S|re.I):
 					self.filmliste.append((sname, surl.replace('\\','')))
-			self.chooseMenuList.setList(map(vibeoListEntry, self.filmliste))
+			self.chooseMenuList.setList(map(vibeoStreamsListEntry, self.filmliste))
 			self.keyLocked = False
 
 	def dataError(self, error):
