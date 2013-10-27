@@ -1,7 +1,7 @@
 <screen name="SimplePlayer" position="0,0" size="1280,720" title="InfoBar" backgroundColor="transparent" flags="wfNoBorder">
   <ePixmap position="40,555" size="1200,150" zPosition="-2" pixmap="~/simpleplayer/spbg.png" />
-  <ePixmap position="40,555" size="1200,150" zPosition="3" pixmap="~/simpleplayer/spglas.png" alphatest="blend" />
-  <ePixmap position="40,555" size="1200,150" zPosition="2" pixmap="~/simpleplayer/spiconframe.png" alphatest="blend" />
+  <ePixmap position="40,555" size="1200,150" zPosition="-3" pixmap="~/simpleplayer/spglas.png" alphatest="blend" />
+  <ePixmap position="40,555" size="1200,150" zPosition="-2" pixmap="~/simpleplayer/spiconframe.png" alphatest="blend" />
   <widget source="session.CurrentService" render="Label" position="273,566" size="700,54" font="mediaportal; 24" valign="center" halign="center" backgroundColor="#00000000" transparent="1">
     <convert type="ServiceName">Name</convert>
   </widget>
