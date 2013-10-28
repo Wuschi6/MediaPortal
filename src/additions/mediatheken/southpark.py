@@ -220,19 +220,20 @@ class SouthparkAktScreen(Screen):
 		self["actions"] = ActionMap(["OkCancelActions", "ShortcutActions", "WizardActions", "ColorActions", "SetupActions", "NumberActions", "MenuActions", "EPGSelectActions"], {
 		"ok"	: self.keyOK,
 		"cancel": self.keyCancel,
-		"green"	: self.keyLocale
+		"green"	: self.keyLocale,
+		"yellow": self.keyQuality
 		}, -1)
 
 		self.locale = config.mediaportal.southparklang.value
+		self.quality = config.mediaportal.southparkquality.value
 
 		self['title'] = Label("Southpark.de")
 		self['ContentTitle'] = Label("Folge: %s" % self.Name)
 		self['name'] = Label("")
 		self['F1'] = Label("Exit")
 		self['F2'] = Label(self.locale)
-		self['F3'] = Label("")
+		self['F3'] = Label(self.quality)
 		self['F4'] = Label("")
-		self['F3'].hide()
 		self['F4'].hide()
 		self['coverArt'] = Pixmap()
 		self['Page'] = Label("")
@@ -256,7 +257,7 @@ class SouthparkAktScreen(Screen):
 	def getVidId(self, data):
 		vidid = re.findall('<script\ssrc="http://activities.niagara.comedycentral.com/register/spsi-de-DE/episodes/(.*?)"\stype="text/javascript"></script>', data, re.S)
 		if vidid:
-			url = "http://www.southpark.de/feeds/video-player/mrss/mgid:arc:episode:southpark.de:" + vidid[0]+ "?lang=%s" % self.locale
+			url = "http://www.southpark.de/feeds/video-player/mrss/mgid:arc:episode:southpark.de:" + vidid[0]
 			getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.getxmls).addErrback(self.dataError)
 		else:
 			message = self.session.open(MessageBox, _("Sorry, this video is not found or no longer available due to date or rights restrictions."), MessageBox.TYPE_INFO, timeout=5)
@@ -264,11 +265,20 @@ class SouthparkAktScreen(Screen):
 			self.close()
 
 	def getxmls(self, data):
-		xmls = re.findall('<item>.*?<title>(.*?)</title>.*?<media:content\stype="text/xml".*?url="(.*?)"', data, re.S)
+		print "locale: " + self.locale
+		if self.locale == "de":
+			self.lang = "&dubbed=preferred"
+		else:
+			self.lang = ""
+		xmls = re.findall('<item>.*?<title>(.*?)</title>.*?<media:category\sscheme="urn:mtvn:id">mgid:arc:video:southparkstudios.com:(.*?)</media:category>', data, re.S)
 		if xmls:
-			for title, url in xmls:
+			for title, id in xmls:
 				if not re.match(".*?Intro\sHD", title):
-					url = url.replace('&amp;','&')
+					if self.quality == "HD":
+						url = "http://www.southpark.de/feeds/video-player/mediagen?uri=mgid:arc:episode:southpark.de:%s&suppressRegisterBeacon=true&suppressRegisterBeacon=true&acceptMethods=fms%s" % (id, self.lang)
+					else:
+						url = "http://www.southpark.de/feeds/video-player/mediagen?uri=mgid:arc:episode:southpark.de:%s&suppressRegisterBeacon=true&suppressRegisterBeacon=true&acceptMethods=hdn1%s" % (id, self.lang)
+						print url
 					self.filmliste.append((decodeHtml(title), url, self.Link))
 			self.chooseMenuList.setList(map(Entry1, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
@@ -284,28 +294,37 @@ class SouthparkAktScreen(Screen):
 		self['handlung'].setText(decodeHtml(handlung))
 		CoverHelper(self['coverArt']).getCover(coverUrl)
 
-	def StartStream(self, data):
-		title = self['liste'].getCurrent()[0][0]
-		rtmpe_data = re.findall('<rendition.*?bitrate="(450|750|1000|1200)".*?<src>(rtmpe://.*?ondemand/)(.*?.mp4)</src>.*?</rendition>', data, re.S|re.I)
-		if rtmpe_data:
-			(quality, host, playpath) = rtmpe_data[-1]
-			if config.mediaportal.useRtmpDump.value:
-				final = "%s' --playpath=mp4:%s'" % (host, playpath)
-				movieinfo = [final, title]
-				self.session.open(PlayRtmpMovie, movieinfo, title)
-			else:
-				idx = self['liste'].getSelectedIndex()
-				self.session.open(SouthparkPlayer, self.filmliste, int(idx) , True, False)
-		else:
-			message = self.session.open(MessageBox, _("Sorry, this video is not found or no longer available due to date or rights restrictions."), MessageBox.TYPE_INFO, timeout=5)
-		self.keyLocked = False
-
 	def keyOK(self):
 		if self.keyLocked:
 			return
 		self.keyLocked = True
 		self.link = self['liste'].getCurrent()[0][1]
-		getPage(self.link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.StartStream).addErrback(self.dataError)
+		if self.quality == "HD":
+			getPage(self.link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.StartStreamRtmp).addErrback(self.dataError)
+		else:
+			getPage(self.link, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.StartStreamHttp).addErrback(self.dataError)
+
+	def StartStreamRtmp(self, data):
+		title = self['liste'].getCurrent()[0][0]
+		rtmpe_data = re.findall('<rendition.*?bitrate="(450|750|1000|1200)".*?<src>(rtmpe://.*?ondemand/)(.*?.mp4)</src>.*?</rendition>', data, re.S|re.I)
+		if rtmpe_data:
+			(quality, host, playpath) = rtmpe_data[-1]
+			final = "%s' --playpath=mp4:%s'" % (host, playpath)
+			movieinfo = [final, title]
+			self.session.open(PlayRtmpMovie, movieinfo, title)
+		else:
+			message = self.session.open(MessageBox, _("Sorry, this video is not found or no longer available due to date or rights restrictions."), MessageBox.TYPE_INFO, timeout=5)
+		self.keyLocked = False
+
+	def StartStreamHttp(self, data):
+		title = self['liste'].getCurrent()[0][0]
+		http_data = re.findall('<rendition.*?bitrate=".*?".*?<src>(.*?)</src>.*?</rendition>', data, re.S|re.I)
+		if http_data:
+			idx = self['liste'].getSelectedIndex()
+			self.session.open(SouthparkPlayer, self.filmliste, int(idx) , True, False)
+		else:
+			message = self.session.open(MessageBox, _("Sorry, this video is not found or no longer available due to date or rights restrictions."), MessageBox.TYPE_INFO, timeout=5)
+		self.keyLocked = False
 
 	def keyLocale(self):
 		if self.keyLocked:
@@ -321,6 +340,22 @@ class SouthparkAktScreen(Screen):
 		config.mediaportal.southparklang.save()
 		configfile.save()
 		self['F2'].setText(self.locale)
+		self.loadPage()
+
+	def keyQuality(self):
+		if self.keyLocked:
+			return
+		self.keyLocked = True
+		if self.quality == "SD":
+			self.quality = "HD"
+			config.mediaportal.southparkquality.value = "HD"
+		elif self.quality == "HD":
+			self.quality = "SD"
+			config.mediaportal.southparkquality.value = "SD"
+
+		config.mediaportal.southparkquality.save()
+		configfile.save()
+		self['F3'].setText(self.quality)
 		self.loadPage()
 
 	def keyCancel(self):
@@ -342,8 +377,5 @@ class SouthparkPlayer(SimplePlayer):
 		getPage(url, headers={'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.gotVideo).addErrback(self.dataError)
 
 	def gotVideo(self, data):
-		rtmpe_data = re.findall('<rendition.*?bitrate="(450|750|1000|1200)".*?<src>(rtmpe://.*?ondemand/)(.*?.mp4)</src>.*?</rendition>', data, re.S|re.I)
-		if rtmpe_data:
-			(quality, host, playpath) = rtmpe_data[-1]
-			final = "%s playpath=mp4:%s pageUrl=%s" % (host, playpath, self.pageurl)
-		self.playStream(self.title, final)
+		http_data = re.findall('<rendition.*?bitrate=".*?".*?<src>(.*?)</src>.*?</rendition>', data, re.S|re.I)
+		self.playStream(self.title, http_data[-1])
