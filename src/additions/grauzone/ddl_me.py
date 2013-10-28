@@ -6,6 +6,7 @@ from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.playhttpmovie import PlayHttpMovie
 from Plugins.Extensions.MediaPortal.resources.simpleplayer import SimplePlayer
 from Plugins.Extensions.MediaPortal.resources.coverhelper import CoverHelper
+from Plugins.Extensions.MediaPortal.resources.youtubeplayer import YoutubePlayer
 
 if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/TMDb/plugin.pyo'):
 	from Plugins.Extensions.TMDb.plugin import *
@@ -18,7 +19,7 @@ else:
 	IMDbPresent = False
 	TMDbPresent = False
 
-DDLME_Version = "ddl.me v0.96 (experimental)"
+DDLME_Version = "ddl.me v0.97 (experimental)"
 
 DDLME_siteEncoding = 'utf-8'
 
@@ -793,6 +794,7 @@ class DDLMEStreams(Screen, ConfigListScreen):
 		self["actions"]  = ActionMap(["OkCancelActions", "ShortcutActions", "EPGSelectActions", "WizardActions", "ColorActions", "NumberActions", "MenuActions", "MoviePlayerActions", "InfobarSeekActions"], {
 			"red" 		: self.keyTxtPageUp,
 			"blue" 		: self.keyTxtPageDown,
+			"green" 	: self.keyTrailer,
 			"ok"    	: self.keyOK,
 			"cancel"	: self.keyCancel
 		}, -1)
@@ -809,6 +811,7 @@ class DDLMEStreams(Screen, ConfigListScreen):
 		self['F3'] = Label("")
 		self['F4'] = Label("Text+")
 
+		self.trailerId = None
 		self.streamListe = []
 		self.streamMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.streamMenuList.l.setFont(0, gFont('mediaportal', 24))
@@ -833,6 +836,11 @@ class DDLMEStreams(Screen, ConfigListScreen):
 			desc = decodeHtml(desc)
 		else:
 			desc = "Keine weiteren Info's !"
+
+		m = re.search('http://www.youtube.com/watch\?v=(.*?)\'', data)
+		if m:
+			self.trailerId = m.group(1)
+			self['F2'].setText('Trailer')
 
 		self.streamListe = []
 		info = re.search('var subcats =.*?"info":', data)
@@ -983,6 +991,16 @@ class DDLMEStreams(Screen, ConfigListScreen):
 				self.session.open(PlayHttpMovie, movieinfo, title)
 			else:
 				self.session.open(SimplePlayer, [(title, stream_url, self.imageUrl)], showPlaylist=False, ltype='ddl.me', cover=True)
+
+	def keyTrailer(self):
+		if self.trailerId:
+			self.session.open(
+				YoutubePlayer,
+				[(self.filmName, '', self.trailerId, self.imageUrl)],
+				playAll = False,
+				showPlaylist=False,
+				showCover=True
+				)
 
 	def keyOK(self):
 		if self.keyLocked:
