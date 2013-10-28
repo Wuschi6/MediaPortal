@@ -402,9 +402,13 @@ class SimplePlayer(Screen, SimpleSeekHelper, InfoBarMenu, InfoBarBase, InfoBarSe
 		if not url:
 			return
 			
-		if re.match('.*?unrestrict.me/dl/', url):
+		if mp_globals.proxy:
 			self['premiumizemeoff'].hide()
 			self['premiumizemeon'].show()
+			mp_globals.proxy = False
+		else:
+			self['premiumizemeon'].hide()
+			self['premiumizemeoff'].show()
 
 		if self.cover or self.cover2:
 			self.showCover(imgurl)

@@ -11,6 +11,7 @@ from userporn import Userporn
 from twagenthelper import TwAgentHelper
 from packer import unpack
 from imports import *
+import mp_globals
 
 # cookies
 ck = {}
@@ -32,6 +33,7 @@ class get_stream_link:
 	def papiCallback(self, data):
 		stream_url = re.findall('"location":"(.*?)"', data, re.S|re.I)
 		if stream_url:
+			mp_globals.proxy = True
 			self._callback(stream_url[0]. replace('\\',''))
 		else:
 			self.stream_not_found()
