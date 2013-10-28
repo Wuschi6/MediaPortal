@@ -33,12 +33,12 @@
     <convert type="ServiceInfo">IsWidescreen</convert>
     <convert type="ConditionalShowHide" />
   </widget>
-  <widget source="session.CurrentService" render="Pixmap" pixmap="~/simpleplayer/ico_hd_off.png" position="1060,655" size="29,20" zPosition="1" alphatest="blend">
+  <widget source="session.CurrentService" render="Pixmap" pixmap="~/simpleplayer/ico_hd_off.png" position="1055,655" size="29,20" zPosition="1" alphatest="blend">
     <convert type="ServiceInfo">VideoWidth</convert>
     <convert type="ValueRange">0,1279</convert>
     <convert type="ConditionalShowHide" />
   </widget>
-  <widget source="session.CurrentService" render="Pixmap" pixmap="~/simpleplayer/ico_hd_on.png" position="1060,655" size="29,20" zPosition="2" alphatest="blend">
+  <widget source="session.CurrentService" render="Pixmap" pixmap="~/simpleplayer/ico_hd_on.png" position="1055,655" size="29,20" zPosition="2" alphatest="blend">
     <convert type="ServiceInfo">VideoWidth</convert>
     <convert type="ValueRange">1280,1980</convert>
     <convert type="ConditionalShowHide" />
@@ -56,14 +56,14 @@
     <convert type="ServiceInfo">VideoHeight</convert>
   </widget>
   <widget position="76,585" size="150,80" zPosition="1" alphatest="blend" transparent="1" name="Icon" />
-<ePixmap pixmap="~/simpleplayer/ico_dolby_off.png" position="1104,655" size="57,20" zPosition="1" alphatest="blend" />
-  <widget source="session.CurrentService" render="Pixmap" pixmap="~/simpleplayer/ico_dolby_on.png" position="1104,655" size="57,20" zPosition="2" alphatest="blend">
+<ePixmap pixmap="~/simpleplayer/ico_dolby_off.png" position="1094,655" size="57,20" zPosition="1" alphatest="blend" />
+  <widget source="session.CurrentService" render="Pixmap" pixmap="~/simpleplayer/ico_dolby_on.png" position="1094,655" size="57,20" zPosition="2" alphatest="blend">
    <convert type="ServiceInfo">IsMultichannel</convert>
     <convert type="ConditionalShowHide" />
  </widget>
  <!--Premiumize.me--> 
-  <widget name="premiumizemeoff" pixmap="~/simpleplayer/premiumizeme_off.png" position="1175,655" size="36,20" zPosition="2" alphatest="blend" />
-  <widget name="premiumizemeon" pixmap="~/simpleplayer/premiumizeme_on.png" position="1175,655" size="36,20" zPosition="2" alphatest="blend" />
+  <widget name="premiumizemeoff" pixmap="~/simpleplayer/premiumizeme_off.png" position="1160,655" size="57,20" zPosition="2" alphatest="blend" />
+  <widget name="premiumizemeon" pixmap="~/simpleplayer/premiumizeme_on.png" position="1160,655" size="57,20" zPosition="2" alphatest="blend" />
   <!-- Film Endzeit -->
   <ePixmap pixmap="~/simpleplayer/clockend.png" position="1110,576" size="24,24" zPosition="1" alphatest="blend" />
   <widget source="session.CurrentService" render="Label" position="1131,575" size="70,24" font="mediaportal;24" halign="right" backgroundColor="#00000000" transparent="1">

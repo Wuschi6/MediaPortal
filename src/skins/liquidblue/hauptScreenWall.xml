@@ -5,23 +5,26 @@
 	<ePixmap position="0,0" size="1280,720" zPosition="-1" pixmap="~/liquidblue/images/mpback.png" />"
 	<widget source="session.VideoPicture" render="Pig" position="930,15" size="320,180" zPosition="3" backgroundColor="transparent" />"
 	<eLabel position="929,14" size="322,182" backgroundColor="#00aaaaaa" zPosition="0" name="Videoback" foregroundColor="#00aaaaaa" />"
-	<ePixmap position="830,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
-	<eLabel text="PVR " position="830,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="830,660" size="90,36" alphatest="blend" zPosition="2" />
-	<ePixmap position="940,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
-	<eLabel text="Menu " position="940,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="940,660" size="90,36" alphatest="blend" zPosition="2" />
-	<ePixmap position="1050,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
-	<eLabel text="Help " position="1050,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="1050,660" size="90,36" alphatest="blend" zPosition="2" />
-	<ePixmap position="1160,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
-	<eLabel text="Exit " position="1160,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="1160,660" size="90,36" alphatest="blend" zPosition="2" />
+	<ePixmap position="835,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
+	<eLabel text="CH+" position="835,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="835,660" size="90,36" alphatest="blend" zPosition="2" />
+	<ePixmap position="725,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
+	<eLabel text="CH-" position="725,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="725,660" size="90,36" alphatest="blend" zPosition="2" />
+	<ePixmap position="945,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
+	<eLabel text="PVR " position="945,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="945,660" size="90,36" alphatest="blend" zPosition="2" />
+	<ePixmap position="1055,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
+	<eLabel text="Help " position="1055,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="1055,660" size="90,36" alphatest="blend" zPosition="2" />
+	<ePixmap position="1165,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
+	<eLabel text="Exit " position="1165,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="1165,660" size="90,36" alphatest="blend" zPosition="2" />
 	<ePixmap position="20,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
-	<eLabel text="CH+" position="20,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+	<eLabel text="Menu " position="20,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="20,660" size="90,36" alphatest="blend" zPosition="2" />
-	<ePixmap position="130,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttongrey.png" alphatest="blend" backgroundColor="#26181d20" />"
-	<eLabel text="CH-" position="130,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+	<ePixmap position="130,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttonred.png" alphatest="blend" backgroundColor="#26181d20" />"
+	<eLabel text="Proxy" position="130,660" size="90,36" transparent="1" font="mediaportal; 18" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 	<ePixmap pixmap="~/liquidblue/images/buttonglas.png" position="130,660" size="90,36" alphatest="blend" zPosition="2" />
 	<ePixmap position="350,660" size="90,36" zPosition="1" pixmap="~/liquidblue/images/buttonyellow.png" alphatest="blend" backgroundColor="#26181d20" />"
 	<eLabel text="Sort" position="350,660" size="90,36" transparent="1" font="mediaportal; 17" backgroundColor="#26181d20" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
