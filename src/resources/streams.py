@@ -77,7 +77,7 @@ class get_stream_link:
 					opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
 					urllib2.install_opener(opener)
 					data = urllib2.urlopen(link).read()
-					
+
 					stream_url = re.findall("'file':\s'(.*?)'", data, re.S)
 					if stream_url:
 						self._callback(stream_url[0])
@@ -100,7 +100,7 @@ class get_stream_link:
 					opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
 					urllib2.install_opener(opener)
 					data = urllib2.urlopen(link).read()
-					
+
 					stream_url = re.findall("'file':\s'(.*?)'", data, re.S)
 					if stream_url:
 						self._callback(stream_url[0])
@@ -262,7 +262,7 @@ class get_stream_link:
 					opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
 					urllib2.install_opener(opener)
 					data = urllib2.urlopen(link).read()
-					
+
 					stream_url = re.findall("'file':\s'(.*?)'", data, re.S)
 					if stream_url:
 						self._callback(stream_url[0])

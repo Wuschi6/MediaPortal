@@ -2383,7 +2383,7 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 			getPage(url, method="GET", timeout=15).addCallback(self.premiumizeData).addErrback(self.dataError)
 		else:
 			self.session.open(MessageBox, "Premiumize.me ist nicht aktivivert.", MessageBox.TYPE_ERROR)
-	
+
 	def premiumizeData(self, data):
 		if re.search('status":200', data):
 			infos = re.findall('"account_name":"(.*?)","type":"(.*?)","expires":(.*?),".*?trafficleft_gigabytes":(.*?)}', data, re.S|re.I)

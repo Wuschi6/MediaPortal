@@ -69,7 +69,7 @@ class youpornGenreScreen(Screen):
 			self.genreliste.insert(0, ("Most Viewed", "http://www.youporn.com/most_viewed/?page=", None))
 			self.genreliste.insert(0, ("Top Rated", "http://www.youporn.com/top_rated/?page=", None))
 			self.genreliste.insert(0, ("New", "http://www.youporn.com/?page=", None))
-			
+
 		self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
 		self.chooseMenuList.setList(map(youpornGenreListEntry, self.genreliste))
 		self.chooseMenuList.moveToIndex(0)
