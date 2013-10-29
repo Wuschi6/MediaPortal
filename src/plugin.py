@@ -2395,25 +2395,8 @@ class haupt_Screen_Wall(Screen, ConfigListScreen):
 				self.session.open(MessageBox, pmsg , MessageBox.TYPE_INFO)
 			else:
 				self.session.open(MessageBox, "Premiumize.me failed.", MessageBox.TYPE_ERROR)
-			
-		elif re.search('status":400', data):
-			self.session.open(MessageBox, _("Premiumize: Ungueltiger Link !"), MessageBox.TYPE_INFO, timeout=3)
 		elif re.search('status":401', data):
-			self.session.open(MessageBox, _("Premiumize: Login fehlgeschlagen !"), MessageBox.TYPE_INFO, timeout=3)
-		elif re.search('status":402', data):
-			self.session.open(MessageBox, _("Premiumize: Du bist kein Premium-User"), MessageBox.TYPE_INFO, timeout=3)
-		elif re.search('status":403', data):
-			self.session.open(MessageBox, _("Premiumize: forbidden !"), MessageBox.TYPE_INFO, timeout=3)
-		elif re.search('status":404', data):
-			self.session.open(MessageBox, _("Premiumize: File not found !"), MessageBox.TYPE_INFO, timeout=3)
-		elif re.search('status":428', data):
-			self.session.open(MessageBox, _("Premiumize: unsupported Streamhoster"), MessageBox.TYPE_INFO, timeout=3)
-		elif re.search('status":502', data):
-			self.session.open(MessageBox, _("Premiumize: Maintenance !"), MessageBox.TYPE_INFO, timeout=3)
-		elif re.search('status":503', data):
-			self.session.open(MessageBox, _("Premiumize: unsupported Streamhoster"), MessageBox.TYPE_INFO, timeout=3)
-		elif re.search('status":509', data):
-			self.session.open(MessageBox, _("Premiumize: Dein traffic ist verbraucht !"), MessageBox.TYPE_INFO, timeout=3)
+			self.session.open(MessageBox, _("Premiumize: Login fehlgeschlagen."), MessageBox.TYPE_INFO, timeout=3)
 
 	def dataError(self, error):
 		print error
