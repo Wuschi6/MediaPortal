@@ -36,9 +36,9 @@ class GetResource(Protocol):
 		self.finished = finished
 
 	def dataReceived(self, data):
-		print "dataReceived:"
+		#print "dataReceived:"
 		self.data += data
-		print data
+		#print data
 
 	def connectionLost(self, reason):
 		print "connectionLost: ", reason
