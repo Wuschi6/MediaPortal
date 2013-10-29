@@ -31,12 +31,32 @@ class get_stream_link:
 		self.tw_agent_hlp = TwAgentHelper(use_proxy=useProxy, p_user=self.puser, p_pass=self.ppass)
 
 	def papiCallback(self, data):
-		stream_url = re.findall('"location":"(.*?)"', data, re.S|re.I)
-		if stream_url:
-			mp_globals.proxy = True
-			self._callback(stream_url[0]. replace('\\',''))
-		else:
-			self.stream_not_found()
+		print data
+		if re.search('status":200', data):
+			stream_url = re.findall('"location":"(.*?)"', data, re.S|re.I)
+			if stream_url:
+				mp_globals.proxy = True
+				self._callback(stream_url[0]. replace('\\',''))
+			else:
+				self.stream_not_found()
+		elif re.search('status":400', data):
+			message = self.session.open(MessageBox, _("Premiumize: Ungueltiger Link !"), MessageBox.TYPE_INFO, timeout=3)
+		elif re.search('status":401', data):
+			message = self.session.open(MessageBox, _("Premiumize: Login fehlgeschlagen !"), MessageBox.TYPE_INFO, timeout=3)
+		elif re.search('status":402', data):
+			message = self.session.open(MessageBox, _("Premiumize: Du bist kein Premium-User"), MessageBox.TYPE_INFO, timeout=3)
+		elif re.search('status":403', data):
+			message = self.session.open(MessageBox, _("Premiumize: forbidden !"), MessageBox.TYPE_INFO, timeout=3)
+		elif re.search('status":404', data):
+			message = self.session.open(MessageBox, _("Premiumize: File not found !"), MessageBox.TYPE_INFO, timeout=3)
+		elif re.search('status":428', data):
+			message = self.session.open(MessageBox, _("Premiumize: unsupported Streamhoster"), MessageBox.TYPE_INFO, timeout=3)
+		elif re.search('status":502', data):
+			message = self.session.open(MessageBox, _("Premiumize: Maintenance !"), MessageBox.TYPE_INFO, timeout=3)
+		elif re.search('status":503', data):
+			message = self.session.open(MessageBox, _("Premiumize: unsupported Streamhoster"), MessageBox.TYPE_INFO, timeout=3)
+		elif re.search('status":509', data):
+			message = self.session.open(MessageBox, _("Premiumize: Dein traffic ist verbraucht !"), MessageBox.TYPE_INFO, timeout=3)
 
 	def check_link(self, data, got_link, showmsgbox=True):
 		print "check_link"
