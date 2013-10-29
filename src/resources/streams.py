@@ -1,3 +1,4 @@
+#	-*-	coding:	utf-8	-*-
 from Screens.MessageBox import MessageBox
 from twisted.web.client import getPage
 from twisted.web import client, error as weberror
@@ -33,30 +34,32 @@ class get_stream_link:
 	def papiCallback(self, data):
 		print data
 		if re.search('status":200', data):
-			stream_url = re.findall('"location":"(.*?)"', data, re.S|re.I)
+			stream_url = re.findall('"stream_location":"(.*?)"', data, re.S|re.I)
+			if not stream_url:
+				stream_url = re.findall('"location":"(.*?)"', data, re.S|re.I)
 			if stream_url:
 				mp_globals.proxy = True
 				self._callback(stream_url[0]. replace('\\',''))
 			else:
 				self.stream_not_found()
 		elif re.search('status":400', data):
-			message = self.session.open(MessageBox, _("Premiumize: Ungueltiger Link !"), MessageBox.TYPE_INFO, timeout=3)
+			message = self.session.open(MessageBox, _("Premiumize: Ungültiger Link."), MessageBox.TYPE_INFO, timeout=3)
 		elif re.search('status":401', data):
-			message = self.session.open(MessageBox, _("Premiumize: Login fehlgeschlagen !"), MessageBox.TYPE_INFO, timeout=3)
+			message = self.session.open(MessageBox, _("Premiumize: Login fehlgeschlagen."), MessageBox.TYPE_INFO, timeout=3)
 		elif re.search('status":402', data):
-			message = self.session.open(MessageBox, _("Premiumize: Du bist kein Premium-User"), MessageBox.TYPE_INFO, timeout=3)
+			message = self.session.open(MessageBox, _("Premiumize: Du bist kein Premium-User."), MessageBox.TYPE_INFO, timeout=3)
 		elif re.search('status":403', data):
-			message = self.session.open(MessageBox, _("Premiumize: forbidden !"), MessageBox.TYPE_INFO, timeout=3)
+			message = self.session.open(MessageBox, _("Premiumize: Kein Zugriff erlaubt."), MessageBox.TYPE_INFO, timeout=3)
 		elif re.search('status":404', data):
-			message = self.session.open(MessageBox, _("Premiumize: File not found !"), MessageBox.TYPE_INFO, timeout=3)
+			message = self.session.open(MessageBox, _("Premiumize: Datei nicht gefunden."), MessageBox.TYPE_INFO, timeout=3)
 		elif re.search('status":428', data):
-			message = self.session.open(MessageBox, _("Premiumize: unsupported Streamhoster"), MessageBox.TYPE_INFO, timeout=3)
+			message = self.session.open(MessageBox, _("Premiumize: Hoster momentan nicht verfügbar."), MessageBox.TYPE_INFO, timeout=3)
 		elif re.search('status":502', data):
-			message = self.session.open(MessageBox, _("Premiumize: Maintenance !"), MessageBox.TYPE_INFO, timeout=3)
+			message = self.session.open(MessageBox, _("Premiumize: Unbekannter technischer Fehler."), MessageBox.TYPE_INFO, timeout=3)
 		elif re.search('status":503', data):
-			message = self.session.open(MessageBox, _("Premiumize: unsupported Streamhoster"), MessageBox.TYPE_INFO, timeout=3)
+			message = self.session.open(MessageBox, _("Premiumize: Temporärer technischer Fehler."), MessageBox.TYPE_INFO, timeout=3)
 		elif re.search('status":509', data):
-			message = self.session.open(MessageBox, _("Premiumize: Dein traffic ist verbraucht !"), MessageBox.TYPE_INFO, timeout=3)
+			message = self.session.open(MessageBox, _("Premiumize: Fair Use Limit ausgschöpft."), MessageBox.TYPE_INFO, timeout=3)
 
 	def check_link(self, data, got_link, showmsgbox=True):
 		print "check_link"
@@ -74,7 +77,7 @@ class get_stream_link:
 					opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
 					urllib2.install_opener(opener)
 					data = urllib2.urlopen(link).read()
-					
+
 					stream_url = re.findall("'file':\s'(.*?)'", data, re.S)
 					if stream_url:
 						self._callback(stream_url[0])
@@ -97,7 +100,7 @@ class get_stream_link:
 					opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
 					urllib2.install_opener(opener)
 					data = urllib2.urlopen(link).read()
-					
+
 					stream_url = re.findall("'file':\s'(.*?)'", data, re.S)
 					if stream_url:
 						self._callback(stream_url[0])
@@ -259,7 +262,7 @@ class get_stream_link:
 					opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
 					urllib2.install_opener(opener)
 					data = urllib2.urlopen(link).read()
-					
+
 					stream_url = re.findall("'file':\s'(.*?)'", data, re.S)
 					if stream_url:
 						self._callback(stream_url[0])
