@@ -4,7 +4,15 @@
 import base64
 from twisted import __version__
 __TW_VER__ = tuple([int(x) for x in __version__.split('.')])
-from twisted.internet.endpoints import TCP4ClientEndpoint
+
+try:
+	from twisted.internet.endpoints import TCP4ClientEndpoint
+except:
+	twEndpoints = False
+	print 'Error: twisted endpoints not imported'
+else:
+	twEndpoints = True
+	
 from twisted.web.client import Agent, RedirectAgent, getPage, ProxyAgent
 from twisted.internet import reactor
 from twisted.web.http_headers import Headers
@@ -28,9 +36,9 @@ class GetResource(Protocol):
 		self.finished = finished
 
 	def dataReceived(self, data):
-		#print "dataReceived:"
+		print "dataReceived:"
 		self.data += data
-		#print data
+		print data
 
 	def connectionLost(self, reason):
 		print "connectionLost: ", reason
@@ -39,12 +47,10 @@ class GetResource(Protocol):
 class TwAgentHelper:
 
 	def __init__(self, proxy_host="scorpion.premiumize.me", use_proxy=False, p_user='', p_pass=''):
-		print "GetRedirectedUrl:"
-		# can not follow rel. url redirects (location header)
-		#self.agent = RedirectAgent(Agent(reactor))
 		print "Twisted Agent in use", __TW_VER__
+		# can not follow rel. url redirects (location header)
 		self.headers = Headers(agent_headers)
-		self.useProxy = use_proxy
+		self.useProxy = use_proxy and twEndpoints
 		if self.useProxy:
 			self.endpoint = TCP4ClientEndpoint(reactor, proxy_host, 80)
 			self.agent = RedirectAgent(ProxyAgent(self.endpoint))

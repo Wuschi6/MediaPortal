@@ -1,6 +1,7 @@
 from Plugins.Extensions.MediaPortal.resources.imports import *
 from Plugins.Extensions.MediaPortal.resources.simpleplayer import SimplePlayer
 from Plugins.Extensions.MediaPortal.resources.coverhelper import CoverHelper
+from Plugins.Extensions.MediaPortal.resources.twagenthelper import TwAgentHelper
 
 def youpornGenreListEntry(entry):
 	return [entry,
@@ -68,11 +69,12 @@ class youpornGenreScreen(Screen):
 			self.genreliste.insert(0, ("Most Viewed", "http://www.youporn.com/most_viewed/?page=", None))
 			self.genreliste.insert(0, ("Top Rated", "http://www.youporn.com/top_rated/?page=", None))
 			self.genreliste.insert(0, ("New", "http://www.youporn.com/?page=", None))
-			self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
-			self.chooseMenuList.setList(map(youpornGenreListEntry, self.genreliste))
-			self.chooseMenuList.moveToIndex(0)
-			self.keyLocked = False
-			self.showInfos()
+			
+		self.genreliste.insert(0, ("--- Search ---", "callSuchen", None))
+		self.chooseMenuList.setList(map(youpornGenreListEntry, self.genreliste))
+		self.chooseMenuList.moveToIndex(0)
+		self.keyLocked = False
+		self.showInfos()
 
 	def dataError(self, error):
 		printl(error,self,"E")
@@ -404,6 +406,8 @@ class youpornFilmScreen(Screen):
 		self.page = 1
 		self.lastpage = 1
 
+		self.tw_agent_hlp = TwAgentHelper()
+		self.tw_agent_hlp.headers.addRawHeader('Cookie','age_verified=1')
 		self.filmliste = []
 		self.chooseMenuList = MenuList([], enableWrapAround=True, content=eListboxPythonMultiContent)
 		self.chooseMenuList.l.setFont(0, gFont('mediaportal', 23))
@@ -418,7 +422,8 @@ class youpornFilmScreen(Screen):
 		self.filmliste = []
 		url = "%s%s" % (self.phCatLink, str(self.page))
 		print url
-		getPage(url, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
+		#getPage(url, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.loadData).addErrback(self.dataError)
+		self.tw_agent_hlp.getWebPage(self.loadData, self.dataError, url, False)
 
 	def loadData(self, data):
 		lastpparse = re.search('id="pagination">(.*)</nav>', data, re.S)
