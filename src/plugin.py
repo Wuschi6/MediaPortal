@@ -74,6 +74,7 @@ config.mediaportal.premiumize_password = ConfigText(default="pass!", fixed_size=
 
 # Southpark Language
 config.mediaportal.southparklang = ConfigText(default="de", fixed_size=False)
+config.mediaportal.southparkquality = ConfigText(default="SD", fixed_size=False)
 
 # Sport
 #from additions.sport.ran import *

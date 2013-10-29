@@ -9,19 +9,21 @@
 	</widget>
 	<widget name="name" position="0,580" size="1140,30" foregroundColor="#00e5b243" backgroundColor="#00101214" transparent="1" font="mediaportal;28" valign="top" halign="center" />
 	<widget name="Mediatheken" position="20,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
-	<widget name="mediatheken" position="20,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png" foregroundColorSelected="#00e5b243" transparent="0"  />
+	<widget name="mediatheken" position="20,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" selectionPixmap="~/original/images/sel.png" foregroundColorSelected="#00e5b243" transparent="0" />
 	<widget name="Grauzone" position="300,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
-	<widget name="grauzone" position="300,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png" foregroundColorSelected="#00e5b243" transparent="0"  />
+	<widget name="grauzone" position="300,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" selectionPixmap="~/original/images/sel.png" foregroundColorSelected="#00e5b243" transparent="0" />
 	<widget name="Funsport" position="580,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
-	<widget name="funsport" position="580,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png" foregroundColorSelected="#00e5b243" transparent="0"  />
+	<widget name="funsport" position="580,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" selectionPixmap="~/original/images/sel.png" foregroundColorSelected="#00e5b243" transparent="0" />
 	<widget name="Porn" position="860,60" size="260,25" backgroundColor="#00aaaaaa" zPosition="5" foregroundColor="#00000000" font="mediaportal;22" halign="center" />
-	<widget name="porn" position="860,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/sel.png" foregroundColorSelected="#00e5b243" transparent="0"  />
-	<ePixmap position="780,645" size="80,2" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+	<widget name="porn" position="860,85" size="260,480" backgroundColor="#00101214" scrollbarMode="showOnDemand" selectionPixmap="~/original/images/sel.png" foregroundColorSelected="#00e5b243" transparent="0" />
+	<ePixmap position="690,645" size="80,2" zPosition="1" pixmap="~/original/images/buttonred.png" alphatest="blend" backgroundColor="#00101214" />
+	<eLabel text="Proxy" position="690,620" size="80,25" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
+	<ePixmap position="780,645" size="80,2" zPosition="1" pixmap="~/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
 	<eLabel text="PVR " position="780,620" size="80,25" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	<ePixmap position="870,645" size="80,2" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+    <ePixmap position="870,645" size="80,2" zPosition="1" pixmap="~/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
 	<eLabel text="Menu " position="870,620" size="80,25" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-    <ePixmap position="960,645" size="80,2" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+    <ePixmap position="960,645" size="80,2" zPosition="1" pixmap="~/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
 	<eLabel text="Help " position="960,620" size="80,25" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
-	<ePixmap position="1050,645" size="80,2" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MediaPortal/skins/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
+	<ePixmap position="1050,645" size="80,2" zPosition="1" pixmap="~/original/images/buttongrey.png" alphatest="blend" backgroundColor="#00101214" />
 	<eLabel text="Exit " position="1050,620" size="80,25" transparent="1" font="mediaportal; 18" backgroundColor="#00101214" foregroundColor="#00ffffff" valign="center" halign="center" zPosition="1" />
 </screen>

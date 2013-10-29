@@ -135,6 +135,7 @@ def decodeHtml(text):
 	text = text.replace("&#xFB;","û")
 	text = text.replace("&#xF8;","ø")
 	text = text.replace("&#x21;","!")
+	text = text.replace("&#x3f;","?")
 
 	text = text.replace('&#8230;','...')
 	text = text.replace('\u2026','...')

@@ -56,7 +56,7 @@ class youpornGenreScreen(Screen):
 		getPage(url, headers={'Cookie': 'age_verified=1', 'Content-Type':'application/x-www-form-urlencoded'}).addCallback(self.genreData).addErrback(self.dataError)
 
 	def genreData(self, data):
-		phCats = re.findall('class="cat_pic">.*?<a\shref="/category(.*?)".*?<img\ssrc="(.*?)"\salt="(.*?)"><span\sclass="cat_overlay', data, re.S)
+		phCats = re.findall('<a\shref="/category(.*?)".*?<img\ssrc="(.*?)"\salt="(.*?)".*?class="catImg', data, re.S)
 		if phCats:
 			for (phUrl, phImage, phTitle) in phCats:
 				phUrl = "http://www.youporn.com/category" + phUrl + '?page='
@@ -441,6 +441,7 @@ class youpornFilmScreen(Screen):
 		phMovies = re.findall('class="wrapping-video-box">.*?<a\shref="(.*?)">.*?<img\ssrc="(.*?)\?.*?"\salt="(.*?)".*?class="duration">(.*?)<span>length.*?class="views">(.*?)\s<span>views', parse.group(1), re.S)
 		if phMovies:
 			for (phUrl, phImage, phTitle, phRuntime, phViews) in phMovies:
+				phUrl = phUrl.replace("&amp;","&")
 				self.filmliste.append((decodeHtml(phTitle), phUrl, phImage, phRuntime, phViews))
 			self.chooseMenuList.setList(map(youpornFilmListEntry, self.filmliste))
 			self.chooseMenuList.moveToIndex(0)
